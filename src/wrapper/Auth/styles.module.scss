@@ -1,0 +1,127 @@
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  // background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bfbfbf;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+  border-bottom-right-radius: 100%;
+}
+.layoutContainer{
+  height: 100vh;
+  width: 100vw;
+}
+.friendListContainer{
+  float: right;
+  width: 15vw;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  height: 75vh;
+}
+.contentMain{
+}
+.contentList{
+  padding: 0 24px;
+  height: 81vh
+}
+
+
+
+@media only screen and (max-width: 600px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #bfbfbf;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-bottom-right-radius: 100%;
+  }
+  .layoutContainer{
+    height: 100vh;
+    width: 100vw;
+  }
+  .contentMain{
+    padding: 0 0px;
+  }
+  .contentSider{
+    flex: 0 0 58px !important;
+    max-width: none !important;
+    min-width: 0px !important;
+    max-height: 512px;
+  }
+
+  .contentList{
+    padding: 0px 0px;
+    height: 81vh;
+  }
+  .contentSider {
+    :global {
+      .ant-layout-sider-children {
+        ul {
+          li{
+            padding-left: 15px !important;
+          }
+        }  
+      }
+    }
+  }
+
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 501px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #bfbfbf;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-bottom-right-radius: 100%;
+  }
+  .layoutContainer{
+    height: 100vh;
+    width: 100vw;
+  }
+  .contentMain{
+    padding: 0 0px;
+  }
+
+  .contentList{
+    padding: 0 24px;
+    height: 85vh
+  }
+
+  .contentSider{
+    flex: 0 0 150px !important;
+    max-width: none !important;
+    min-width: 0px !important;
+  }
+}

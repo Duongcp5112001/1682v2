@@ -1,0 +1,193 @@
+import React from "react";
+import { Badge, Dropdown, Layout, MenuProps, Spin, message } from "antd";
+import { removeCookie } from "~/utils/cookie";
+import { ROUTES } from "~/routes";
+
+import history from "~/utils/history";
+import loadable from "~/utils/loadable";
+import iconNotification from "~/assets/images/iconNotification.svg";
+import iconAvatar from "~/assets/images/iconAvatar.svg";
+import logo from "~/assets/images/logo.png";
+
+import { RootState, useAppDispatch, useAppSelector } from "~/store";
+import { setUserInfo } from "~/store/userInfo";
+import { Authorization } from "~/wrapper/Authorization";
+import { UserRole } from "~/utils/constant";
+import styles from "./styles.module.scss";
+import { useNavigate } from "react-router-dom";
+import { NotificationSchema, setAllNotifications } from "~/store/notification";
+import { getSelfNotification, markAsRead } from "~/api/notification";
+import { LoadingOutlined } from '@ant-design/icons';
+
+
+
+const Svg = loadable(() => import("~/components/atoms/Svg"));
+const { Header: LayoutHeader } = Layout;
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+export default function Header() {
+  const me = useAppSelector((state: RootState) => state.userInfo.userData);
+  const dispatch = useAppDispatch();
+  const allNotifications = useAppSelector(
+    (state: RootState) => state.notification.allNotifications
+  );
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    removeCookie("token");
+    dispatch(setUserInfo({}));
+    history.push(ROUTES.Login);
+  };
+
+  const handleClickLogo = () => {
+    history.push("/");
+  };
+
+  const showProfile = () => {
+    // history.push(ROUTES.Profile);
+  };
+
+  const handleSetting = () => {
+    // history.push(ROUTES.Setting);
+  };
+
+  const handleShowTransaction = () => {
+    // history.push(ROUTES.PaymentsAuthor);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <div onClick={showProfile}>Profile</div>,
+    },
+    me &&
+      me.role &&
+      me.role === UserRole.Admin && {
+        key: "2",
+        label: <div onClick={handleSetting}>Setting</div>,
+      },
+    me &&
+      me.role &&
+      me.role === UserRole.Author && {
+        key: "3",
+        label: <div onClick={handleShowTransaction}>Payments</div>,
+      },
+    {
+      type: "divider",
+    },
+    {
+      key: "4",
+      label: <div onClick={logout}>Logout</div>,
+    },
+  ];
+
+  const handleClickNotification = async (
+    schema: string,
+    schemaId: string,
+    read: boolean,
+    notificationId: string
+  ) => {
+    if (!read) {
+      const res = await markAsRead(notificationId);
+      if (res && !res.errorCode && !res.errors.length) {
+        const { data } = res;
+        dispatch(setAllNotifications(data));
+      } else {
+        message.error("Fail to load notifications");
+      }
+    }
+
+    const url = `/schema/id`;
+
+    navigate(
+      url
+        .replace(
+          "schema",
+          schema === NotificationSchema.BOOK
+            ? "books/lists"
+            : NotificationSchema.USER
+            ? "userProfile"
+            : "post"
+        )
+        .replace("id", schemaId)
+    );
+  };
+
+  return (
+    <Layout className={styles.header}>
+      <LayoutHeader className={styles.coverHeader}>
+        <div
+          onClick={handleClickLogo}
+          className={`${styles.title} cursor-pointer`}
+          tabIndex={0}
+        >
+          <Svg className={styles.logo} src={logo} />
+
+          <h3></h3>
+        </div>
+
+        <div className={styles.info}>
+          <Dropdown
+            overlayStyle={{
+              maxHeight: "40vh",
+              overflowX: "hidden",
+              overflowY: "scroll",
+            }}
+            menu={{
+              items: allNotifications.map((item) => ({
+                ...item,
+                key: item._id,
+                label: (
+                  <div
+                    onClick={() =>
+                      handleClickNotification(
+                        item.schema,
+                        item.schemaId,
+                        item.read,
+                        item._id
+                      )
+                    }
+                    style={{ color: item.read ? "" : "blue" }}
+                  >
+                    {item.content}
+                  </div>
+                ),
+              })),
+            }}
+          >
+            <Badge
+              count={allNotifications.filter((item) => !item.read).length}
+              size="small"
+            >
+              <Svg
+                src={iconNotification}
+                alt="icon notification"
+                className={styles.iconNotification}
+              />
+            </Badge>
+          </Dropdown>
+          { me ? 
+            <Dropdown menu={{ items }}>
+              <div className={styles.coverInfo}>
+                <div className={styles.avatar}>
+                  <Svg
+                    src={me?.avatar}
+                    alt="icon avatar"
+                    className={styles.iconAvatar}
+                  />
+                </div>
+
+                <div className={styles.name}>
+                  {me?.username}
+                </div>
+              </div>
+            </Dropdown>
+            : <Spin indicator={antIcon} />
+          }
+        </div>
+      </LayoutHeader>
+    </Layout>
+  );
+}
