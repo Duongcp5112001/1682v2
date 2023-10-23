@@ -7,7 +7,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta'
 import { useAppSelector } from '~/store'
 import { setPost, updatePost } from '~/api/post'
-import { KEY_MESSAGE, SUCCESS } from '~/utils/constant'
+import { CREATE_POST_SUCCESS, KEY_MESSAGE, SUCCESS } from '~/utils/constant'
 import { Option } from '~/components/atoms/Select';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import storage from '~/utils/firebase';
@@ -29,7 +29,7 @@ const ModalPost = (props: Props) => {
   const userData = useAppSelector((state) => state.userInfo.userData);
   const rules = [{ required: true, message: '' }];
   
-  const [metadataList, setMetadataList] = useState<any>([]);
+  const [metadataList, setMetadataList] = useState<any>('');
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -50,14 +50,9 @@ const ModalPost = (props: Props) => {
       },
       async () => {
         const snapshot = await uploadTask;
-        const metadata = await getMetadata(storageRef);
-        const result = {
-          name: metadata.name,
-          contentType: metadata.contentType,
-          url: await getDownloadURL(snapshot.ref)
-        };
-        setMetadataList((prevState: any) => [...prevState, result]);
-        onSuccess(result);
+        const url = await getDownloadURL(snapshot.ref)
+        setMetadataList(url);
+        onSuccess(url);
       }
     );
   };
@@ -68,15 +63,14 @@ const ModalPost = (props: Props) => {
       const {document, ...rest} = formValues;
       const fmData = {
         ...rest,
-        isAnonymous: isAnonymous,
-        images: metadataList
+        image: metadataList
       }
       if (postData) {
         res = await updatePost(postData._id, fmData)
       } else {
         res = await setPost(fmData)
       }
-      if (res.message === SUCCESS) {
+      if (res.msg === CREATE_POST_SUCCESS) {
         message.success({
           content: postData ? 'Update post success' : 'Add post success'
         })
@@ -175,7 +169,7 @@ const ModalPost = (props: Props) => {
       className={styles.formContainer}
     >
       <Form.Item 
-        name='content'
+        name='description'
         rules={rules}
       >
         <TextArea

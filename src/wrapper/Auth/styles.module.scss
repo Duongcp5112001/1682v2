@@ -20,17 +20,50 @@
 .layoutContainer{
   height: 100vh;
   width: 100vw;
+  :global {
+    .ant-layout-has-sider {
+      min-height: 93vh;
+    }
+  }
 }
 .friendListContainer{
   float: right;
-  width: 15vw;
+  width: 250px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  height: 75vh;
+  height: 85vh;
 }
 .contentMain{
+  :global {
+    .ant-layout-content {
+      div {
+        align-items: start;
+      }
+      .ant-list{
+        margin: auto;
+        max-width: 50vw;
+        max-height: 80vh !important;
+      }
+    }
+    .ant-menu {
+      height: 50% !important;
+    }
+  }
+  .adsContainer {
+    height: 50%;
+    max-width: 250px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 200px;
+      height: auto;
+      padding: 20px;
+    }
+  }
 }
 .contentList{
-  padding: 0 24px;
+
+  padding: 0 204px;
   height: 81vh
 }
 

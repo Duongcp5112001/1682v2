@@ -4,7 +4,6 @@ import { Form, message } from 'antd';
 import { TextArea } from '~/components/atoms/Input';
 import Modal from '~/components/atoms/Modal'
 import { SUCCESS } from '~/utils/constant';
-import { editBookComment } from '~/api/book';
 import { editPostComment } from '~/api/post';
 
 interface Props {
@@ -29,18 +28,16 @@ const ModalEditComment = (props: Props) => {
 
   const handleEditComment = async (formValues: any) => {
     let res: any = null;
-    if (bookId) {
-      res = await editBookComment(bookId, commentId, formValues)
-    } else if (postId) {
+    if (postId) {
       res = await editPostComment(postId, commentId, formValues)
     }
-    if (res.message === SUCCESS) {
+    if (res.msg === SUCCESS) {
       message.success('Update comment success')
       refetch();
       setVisivle(false);
       form.resetFields();
     } else {
-      message.error(res.message)
+      message.error(res.msg)
     }
   }
   return (

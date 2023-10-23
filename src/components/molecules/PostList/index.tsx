@@ -6,6 +6,7 @@ import { usePosts } from '~/hooks/usePost';
 import { PARAMS_FILTER } from '~/utils/constant';
 import { getCookie } from '~/utils/cookie';
 import loadable from '~/utils/loadable';
+import CreatePost from '../CreatePost';
 
 const PostList = loadable(() => import('~/components/molecules/PostList/List'));
 
@@ -15,6 +16,9 @@ const NewFeed = () => {
 
   return (
     <>
+      <CreatePost
+        afterSuccess={refetch}
+      />
       <PostList 
         dataPosts={data?.data}
         isLoading={isLoading}

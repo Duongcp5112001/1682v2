@@ -19,7 +19,7 @@ function Wrapper() {
   const userId = getCookie("userId");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: dataMember } = useMember();
+  const { data: dataMember } = useMember(token);
   // useEffect(() => {
   //   const getSelfMessages = async () => {
   //     try {

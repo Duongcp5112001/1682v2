@@ -5,8 +5,9 @@ import { getMemberInfo, getMemberInfoById } from '~/api/member';
 export const QK_MEMBER = 'member';
 export const QK_MEMBERBYID = 'member/id';
 
-export function useMember() {
+export function useMember(token: any) {
   const res = useQuery([QK_MEMBER], () => getMemberInfo(), {
+    enabled: Boolean(token),
     keepPreviousData: true,
     refetchOnWindowFocus: false
   });

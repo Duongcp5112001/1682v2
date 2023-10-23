@@ -19,6 +19,7 @@ export default function Home() {
      navigate(ROUTES.Login) 
     }
     if (userData){
+      navigate(ROUTES.Posts)
       // if (userData.role && ((userData.role === UserRole.Admin))) {
       //   navigate(ROUTES.DashBoard);
       // } else if (userData.role && ((userData.role === UserRole.Author))) {
@@ -31,7 +32,7 @@ export default function Home() {
 
   return (
     <div className='d-flex justify-content-center align-items-center w-100 h-100'>
-      <NewFeed/>
+      <Spin spinning />
     </div>
   );
 }

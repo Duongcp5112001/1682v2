@@ -33,7 +33,7 @@ export const handleLogin = ({
   }
 
   if (getCookie('token')) {
-    history.push(ROUTES.Home)
+    history.push(ROUTES.Posts)
     // if (userRole === UserRole.User) {
     //   history.push(ROUTES.Posts);
     // }

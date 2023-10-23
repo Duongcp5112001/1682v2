@@ -1,12 +1,12 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { getFriends } from '~/api/friend';
+import { getFriendList } from '~/api/member';
 
 export const QK_FRIEND = 'friends';
 
-export function useFriends(params: any) {
-  const res = useQuery([QK_FRIEND, {params}], () => getFriends(params), {
-    enabled: Boolean(params),
+export function useFriends(token: any) {
+  const res = useQuery([QK_FRIEND], () => getFriendList(), {
+    enabled: Boolean(token),
     keepPreviousData: true,
     refetchOnWindowFocus: false
   });

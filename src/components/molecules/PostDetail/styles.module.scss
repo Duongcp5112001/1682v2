@@ -1,4 +1,13 @@
-.listContainer {
+.container {
+  background: #fff;
+  overflow-y: scroll;
+  max-height: 75vh !important;
+  // margin: 0px 100px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  p{
+    margin: 0 0.5rem 0;
+    align-self: self-end;
+  }
   :global {
     .ant-card .ant-card-actions {
       padding-left: 24px;
@@ -19,34 +28,21 @@
       margin-top: 15px;
     }
   }
-  .postContent {
+  .contentWrapper {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    .imageContainer {
-      margin-top: 2rem;
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      // img {
-      //   width: 30%;
-      //   height: auto;
-      // }
+    .infoContainer {
+      margin: 16px;
     }
   }
-  .userIdea{
-    font-size: 12px;
-    color: #4096ff;
-    font-style: italic;
+  .postContent {
+    margin-top: 20px;
   }
   .commentContainer{
     :global {
       .ant-form-item{
         margin: 0 !important;
       }
-    }
-    .commentArea {
-      padding: 0px 20px;
     }
     .comment{ 
       display: flex;
@@ -77,40 +73,5 @@
         }
       }
     }
-  }
-}
-
-@media only screen and (max-width: 1024px) and (min-width: 501px){
-  .listContainer {
-    margin: 10px 0px ;
-    :global {
-      .ant-card .ant-card-actions {
-        padding-left: 24px;
-        li {
-          width: fit-content !important;
-          margin-right: 15px;
-          margin-left: 15px;
-        }
-      }
-      .ant-card-actions>li:not(:last-child){
-        border: none;
-      }
-    }
-    .commentContainer{
-      .comment{ 
-        background-color: #e6f7ff;
-        padding: 15px;
-        border-radius: 1rem;
-        margin-top: 10px;
-        margin-left: 50px;
-        margin-right: 50px;
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 600px){
-  .listContainer {
-    margin: 0;
   }
 }

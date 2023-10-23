@@ -6,7 +6,9 @@ export const DATE_VI_FORMAT = "dd/MM/yyyy";
 export const DATE_SIMPLE = "MM/dd";
 
 export const LOGIN_SUCCESS = "Login Success!";
-export const SUCCESS = "Success";
+export const CREATE_POST_SUCCESS = "Create posts Success!";
+
+export const SUCCESS = "Success!";
 export const KEY_MESSAGE = "message";
 export const TITLE_ASC = "TITLE_ASC";
 export const NAME_ASC = "NAME_ASC";

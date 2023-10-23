@@ -1,40 +1,44 @@
 import React, { useEffect, useState } from 'react'
-import Spin from '~/components/atoms/Spin'
-import List from '~/components/atoms/List'
-import styles from './styles.module.scss'
-import { Avatar, Card, Dropdown, Form, Statistic, message } from 'antd'
-import { useAppSelector } from '~/store'
-import { DATE, SUCCESS } from '~/utils/constant'
-import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post'
+import { Avatar, Card, Dropdown, Form, Popover, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
   DislikeOutlined,
+  CheckOutlined,
+  CloseOutlined,
   EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone
 } from '@ant-design/icons';
-import Meta from 'antd/es/card/Meta'
-import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
-import { Authorization } from '~/wrapper/Authorization'
-import { TextArea } from '~/components/atoms/Input'
-import ModalEditComment from '~/components/atoms/ModalEditComment'
-import ModalPost from '../PostModal'
+import Meta from 'antd/es/card/Meta';
+import loadable from '~/utils/loadable';
+
+import { format } from 'date-fns';
+import { DATE, SUCCESS } from '~/utils/constant';
+import { useAppSelector } from '~/store';
+import { TextArea } from '~/components/atoms/Input';
+import styles from './styles.module.scss'
+
+import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
+import ModalEditComment from '~/components/atoms/ModalEditComment';
+import { usePostDetail } from '~/hooks/usePost';
 import defaultUser from '~/assets/images/defaultUser.png'
 
+import Spin from '~/components/atoms/Spin';
+// import ModalPost from '../PostsList/PostModal';
+
 interface Props {
-  dataPosts?: any;
-  isLoading?: boolean;
-  isFetching?: boolean;
-  refetch: () => void;
+  postId: any;
 }
 
-const PostList = (props: Props) => {
-  const { dataPosts, isFetching, isLoading, refetch } = props;
+const PostDetail = (props: Props) => {
+  const { postId } = props;
+
+
+  const {data, isLoading, isFetching, refetch} = usePostDetail(postId)
+  const dataPosts = data?.posts;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
-  const [postId, setPostId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
@@ -139,8 +143,7 @@ const PostList = (props: Props) => {
     }
   };
 
-  const handleKeyPress = (event: any, postId: string) => {
-    setPostId(postId)
+  const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
       form.submit();
     }
@@ -178,95 +181,85 @@ const PostList = (props: Props) => {
     setVisibleModalEditPost(true)
     setPostEditing(post)
   }
+
   return (
     <Spin spinning={isLoading || isFetching}>
-      <List
-        className={styles.listContainer}
-        itemLayout="vertical"
-        size="small"
-        style={{ maxHeight: '65vh', overflowY: 'scroll' }}
-        dataSource={dataSource}
-        renderItem={(item: any) => (
-          <div key={item._id}>
+      <div className={styles.container}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.infoContainer}>
+            <div>
             <Card
               className='mt-2'
               headStyle={{ border: 'none' }}
               actions={[
                 <Statistic
-                  value={item?.like?.length}
+                  value={dataSource?.like?.length}
                   prefix={
-                    item.like?.find((e: any) => e.user === userData?._id) ?
+                    dataSource.like?.find((e: any) => e.user === userData?._id) ?
                       <LikeTwoTone
-                        onClick={() => handleLike_Dislike(item._id, 'like')} />
+                        onClick={() => handleLike_Dislike(dataSource._id, 'like')} />
                       :
                       <LikeOutlined
-                        onClick={() => handleLike_Dislike(item._id, 'like')}
+                        onClick={() => handleLike_Dislike(dataSource._id, 'like')}
                       />
                   }
                   valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
-                  value={item.dislike?.length}
+                  value={dataSource.dislike?.length}
                   prefix={
-                    item.dislike?.find((e: any) => e.user === userData?._id) ?
+                    dataSource.dislike?.find((e: any) => e.user === userData?._id) ?
                       <DislikeTwoTone
-                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                        onClick={() => handleLike_Dislike(dataSource._id, 'dislike')}
                       />
                       :
                       <DislikeOutlined
-                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                        onClick={() => handleLike_Dislike(dataSource._id, 'dislike')}
                       />
                   }
                   valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
-                  value={item?.comments?.length}
+                  value={dataSource?.comments?.length}
                   valueStyle={{ fontSize: '16px' }}
                   prefix={
                     <MessageOutlined
-                      onClick={() => handleShowComment(item._id)}
+                      onClick={() => handleShowComment(dataSource._id)}
                     />
                   }
                 />
               ]}
-              // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
+              // extra={<div onClick={() => handleEditPost(dataSource)}>Edit</div>}
             >
               <Meta
                 avatar={<Avatar size={42} src={defaultUser} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
-                  <Link
-                    to={`/userProfile/${item.updatedBy?._id}`}
-                    // to={`/post/${item._id}
-                  >
-                    {'User name'}
-                  </Link>
+                  'User name'
                 }
                 description={(
                   // <>
                   //   <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
                   //   <div>{item.description}</div>
                   // </>
-                  <Link
-                    to={`/posts/${item._id}`}
-                  >
-                    {format(new Date(item.createdAt), DATE)}
-                  </Link>
+                  <div>
+                    { dataSource?.updatedAt && format(new Date(dataSource.updatedAt), DATE)}
+                  </div>
                 )}
               />
               <div className={styles.postContent}>
-                {item.description}
+                {dataSource.description}
                 <div
                   className={styles.imageContainer}
                 >
-                  <img src={item.image} alt={item?.name} />
+                  <img src={dataSource.image} alt={dataSource?.name} />
                 </div>
               </div>
             </Card>
-            {showCommentMap[item._id] &&
+            {showCommentMap[dataSource._id] &&
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
-                  {item?.comments?.map((comment: any) =>
+                  {dataSource?.comments?.map((comment: any) =>
                     <div
                       key={comment._id}
                       className={styles.comment}
@@ -283,20 +276,20 @@ const PostList = (props: Props) => {
                           }
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
-                      {(comment.createdBy._id === userData?._id) ?
+                      {(comment.updatedBy === userData?._id) ?
                         <Dropdown
                           menu={
                             {
                               items: [
                                 {
-                                  label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                  label: <div onClick={() => handleEditComment(dataSource._id, comment._id)}>Edit comment</div>,
                                   key: '0',
                                 },
                                 {
                                   type: 'divider',
                                 },
                                 {
-                                  label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                  label: <div onClick={() => handleDeleteComment(dataSource._id, comment._id)}>Delete comment</div>,
                                   key: '2',
                                   danger: true,
                                 },
@@ -321,7 +314,6 @@ const PostList = (props: Props) => {
                       form={form}
                       layout='vertical'
                       onFinish={handleComment}
-                      key={item._id}
                     >
                       <Form.Item
                         name='content'
@@ -329,7 +321,7 @@ const PostList = (props: Props) => {
                         <TextArea
                           className='mt-2'
                           placeholder='Enter your comment'
-                          onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                          onKeyPress={(e: any) => handleKeyPress(e)}
                         />
                       </Form.Item>
                     </Form>
@@ -338,23 +330,21 @@ const PostList = (props: Props) => {
               </Spin>
             }
           </div>
-        )}
-      />
-      {/* <ModalEditComment
+        </div>
+      </div>
+    </div>
+      <ModalEditComment
         visible={visibleModalEditComment}
         setVisivle={setVisibleModalEditComment}
         postId={itemEditComment?.postId}
         commentId={itemEditComment?.commentId}
         refetch={refetch}
-      /> */}
-      <ModalPost
-        postData={postEditing}
-        visible={visibleModalEditPost}
-        setVisible={setVisibleModalEditPost}
-        afterSuccess={refetch}
       />
     </Spin>
   )
 }
 
-export default PostList
+
+
+
+export default PostDetail

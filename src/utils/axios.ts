@@ -34,7 +34,8 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     const data: any = error.response?.data;
-    if (data?.errorCode === '403' && data?.message !== 'Required admin permission') {
+    // Error code from BE for 403
+    if (data?.errorCode === '13' && data?.msg !== 'Authorization forbidden') {
       handleLogout(ROUTES.Login)
     }
   }

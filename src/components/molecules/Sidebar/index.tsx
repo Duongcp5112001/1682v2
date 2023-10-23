@@ -3,7 +3,7 @@ import history from '~/utils/history';
 import { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useLocation } from 'react-router-dom';
-
+import styles from './styles.module.scss'
 export default function SideNav(props: { menus: any[] }) {
   const { menus } = props;
   const [openKeys, setOpenKeys] = useState<string[]>([]);
@@ -35,6 +35,7 @@ export default function SideNav(props: { menus: any[] }) {
   }, [pathname, menus]);
   return (
     <Menu
+      className={styles.sidebarContainer}
       onClick={handleClick}
       selectedKeys={[selectedKey]}
       openKeys={openKeys}

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
-import { Avatar, Layout, MenuProps, theme } from "antd";
+import { Avatar, Carousel, Layout, MenuProps, theme } from "antd";
 
 import { ROUTES } from "~/routes";
 
@@ -27,6 +27,9 @@ import SideNav from "~/components/molecules/Sidebar";
 import { RootState, useAppSelector } from "~/store";
 import defaultAvatar from '~/assets/images/defaultUser.png'
 import { UserRole } from "~/utils/constant";
+import Ads from "~/components/molecules/Ads";
+import adsImage from '~/assets/images/ads.png'
+import FriendList from "~/components/molecules/FriendList";
 
 type MenuItem = Required<MenuProps>["items"][number];
 interface Props {
@@ -51,7 +54,7 @@ function Auth(props: Props) {
             style={{display: "flex"}}
             to={''}
           >
-            <Avatar src={defaultAvatar}/>
+            <Avatar src={userData?.avatar}/>
             <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
           </Link>
       },
@@ -88,16 +91,18 @@ function Auth(props: Props) {
             style={{ background: colorBgContainer }}
           >
             <SideNav menus={menuLeft} />
+            <div
+              className={styles.adsContainer}
+            >
+              <img src={adsImage} alt="" />
+            </div>
           </Sider>
           <Content className={styles.contentList}>{children}</Content>
-          {/* <div className={styles.friendListContainer}>
+          <div className={styles.friendListContainer}>
             <FriendList />
-          </div> */}
+          </div>
         </Layout>
       </Content>
-      <Footer className={styles.footer} style={{ textAlign: "center" }}>
-        1682 ©2023 Created by Duong - Phuong
-      </Footer>
     </Layout>
   );
 }
