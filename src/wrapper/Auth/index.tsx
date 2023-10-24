@@ -1,35 +1,26 @@
 import React, { useMemo, useState } from "react";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { Avatar, Carousel, Layout, MenuProps, theme } from "antd";
+import { Avatar, Layout, MenuProps, theme } from "antd";
 
 import { ROUTES } from "~/routes";
 
 import styles from "./styles.module.scss";
 import {
-  UnorderedListOutlined,
-  TagsOutlined,
-  DashboardOutlined,
+  LaptopOutlined,
   TagOutlined,
   UsergroupAddOutlined,
-  UserAddOutlined,
-  AccountBookOutlined,
-  DollarCircleOutlined,
-  HeartOutlined,
-  BookOutlined,
 } from "@ant-design/icons";
-import { Content, Footer } from "antd/es/layout/layout";
+import { Content } from "antd/es/layout/layout";
 import Header from "~/components/molecules/Header";
 import Sider from "antd/es/layout/Sider";
 import history from "~/utils/history";
 import SideNav from "~/components/molecules/Sidebar";
 import { RootState, useAppSelector } from "~/store";
-import defaultAvatar from '~/assets/images/defaultUser.png'
 import { UserRole } from "~/utils/constant";
-import Ads from "~/components/molecules/Ads";
-import adsImage from '~/assets/images/ads.png'
 import FriendList from "~/components/molecules/FriendList";
+import AdsList from "~/components/molecules/AdsList";
 
 type MenuItem = Required<MenuProps>["items"][number];
 interface Props {
@@ -72,6 +63,13 @@ function Auth(props: Props) {
         url: 'ROUTES.Group',
         content: "Group",
       },
+      {
+        key: ROUTES.Game,
+        label: <Link to={ROUTES.Game}>Game</Link>,
+        icon: <LaptopOutlined  style={{ fontSize: "18px" }} />,
+        url: ROUTES.Game,
+        content: "Game",
+      },
     ],
     [userData]
   );
@@ -84,7 +82,7 @@ function Auth(props: Props) {
       <Content className={styles.contentMain}>
         <Layout
           className={styles.contentNav}
-          style={{ padding: "24px 0", background: colorBgContainer }}
+          style={{ background: colorBgContainer }}
         >
           <Sider
             className={styles.contentSider}
@@ -94,7 +92,7 @@ function Auth(props: Props) {
             <div
               className={styles.adsContainer}
             >
-              <img src={adsImage} alt="" />
+              <AdsList/>
             </div>
           </Sider>
           <Content className={styles.contentList}>{children}</Content>

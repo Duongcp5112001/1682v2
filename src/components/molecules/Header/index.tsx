@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Dropdown, Layout, MenuProps, Spin, message } from "antd";
+import { Badge, Dropdown, Layout, MenuProps, Spin, message, Input } from "antd";
 import { removeCookie } from "~/utils/cookie";
 import { ROUTES } from "~/routes";
 
@@ -7,7 +7,7 @@ import history from "~/utils/history";
 import loadable from "~/utils/loadable";
 import iconNotification from "~/assets/images/iconNotification.svg";
 import iconAvatar from "~/assets/images/iconAvatar.svg";
-import logo from "~/assets/images/logo.png";
+import logo from "~/assets/images/logo_transparent.png";
 
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
 import { setUserInfo } from "~/store/userInfo";
@@ -19,7 +19,7 @@ import { NotificationSchema, setAllNotifications } from "~/store/notification";
 import { getSelfNotification, markAsRead } from "~/api/notification";
 import { LoadingOutlined } from '@ant-design/icons';
 
-
+const { Search } = Input;
 
 const Svg = loadable(() => import("~/components/atoms/Svg"));
 const { Header: LayoutHeader } = Layout;
@@ -125,8 +125,10 @@ export default function Header() {
         >
           <Svg className={styles.logo} src={logo} />
 
-          <h3></h3>
+          <h3 className='my-0 mx-3 text-primary text-lg font-semibold'>Mystic</h3>
         </div>
+
+        <Search className="w-[500px] ml-5 border-primary"/>
 
         <div className={styles.info}>
           <Dropdown

@@ -189,8 +189,9 @@ const PostList = (props: Props) => {
         renderItem={(item: any) => (
           <div key={item._id}>
             <Card
-              className='mt-2'
+              style={{marginBottom: '1rem'}}
               headStyle={{ border: 'none' }}
+              className='bg-bgColor'
               actions={[
                 <Statistic
                   value={item?.like?.length}
@@ -232,14 +233,14 @@ const PostList = (props: Props) => {
               // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
-                avatar={<Avatar size={42} src={defaultUser} />}
+                avatar={<Avatar size={42} src={item?.updatedBy?.avatar} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
                     to={`/userProfile/${item.updatedBy?._id}`}
                     // to={`/post/${item._id}
                   >
-                    {'User name'}
+                    {`User-${(item?.updatedBy?._id).slice(-6)}`}
                   </Link>
                 }
                 description={(

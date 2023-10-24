@@ -18,3 +18,11 @@ export type UserInfoState = {
   "gender"?: string;
   "_id": string
 }
+
+export type IMemoryCard = {
+  id?: number;
+  image: string;
+  name: string;
+  isFlipped: boolean;
+  isMatched: boolean;
+}

@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 import { useFriends } from "~/hooks/useFriends";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
+import defaultAvatar from '~/assets/images/defaultUser.png'
 import Spin from "~/components/atoms/Spin";
 // import ChatModal from "~/components/atoms/ChatModal";
 import { setMessages, setReceiver } from "~/store/chatMessages";
@@ -75,7 +76,7 @@ const FriendList = () => {
         dataSource={friends}
         renderItem={(item: any) => (
           <List.Item
-            key={item?.user?._id}
+            key={item?._id}
             className={styles.friendItem}
             onClick={() => {
               setReceiverName(
@@ -87,14 +88,14 @@ const FriendList = () => {
             {/* Show only the avatar when screen size is small */}
             <div className={styles.avatarContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={30} src={''} />}
+                avatar={<Avatar size={30} src={defaultAvatar} />}
               />
             </div>
 
             {/* Show the name and last message when screen size is large */}
             <div className={styles.detailsContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={40} src={''} />}
+                avatar={<Avatar size={40} src={defaultAvatar} />}
                 title={''}
                 // description={getLastMessage(item?.user?._id)}
               />
