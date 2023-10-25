@@ -50,10 +50,10 @@ function Auth(props: Props) {
           </Link>
       },
       {
-        key: 'ROUTES.Books',
+        key: ROUTES.Friend,
         label: <Link to={''}>Friend</Link>,
         icon: <UsergroupAddOutlined  style={{ fontSize: "18px" }} />,
-        url: 'ROUTES.Friend',
+        url: ROUTES.Friend,
         content: "Friend",
       },
       {

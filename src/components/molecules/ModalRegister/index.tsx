@@ -2,16 +2,10 @@ import React, { useMemo } from 'react';
 import Modal from '~/components/atoms/Modal';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { Option } from '~/components/atoms/Select';
 
-
-import styles from './styles.module.scss';
 import { setRegister } from '~/api/register';
-import { Gender, SUCCESS } from '~/utils/constant';
-import { ROUTES } from '~/routes';
-import DatePicker from '~/components/atoms/DatePicker';
-import Select from '~/components/atoms/Select';
-import InputNumber from '~/components/atoms/InputNumber';
+import { Gender, REGISTER_SUCCESS, SUCCESS } from '~/utils/constant';
+import styles from './styles.module.scss';
 
 interface Props{
   visible: boolean;
@@ -20,38 +14,26 @@ interface Props{
 
 const ModalRegister = (props: Props) => {
   const {visible, setVisible} = props;
-  const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const rules = [{ required: true, message: '' }];
-  const genderOption = useMemo(() => Object.entries(Gender)
-  // render options gender
-  .map((item: any, index) => (
-    { id: index, name: item[1], value: item[0] }
-  )), []);
 
   const handleRegister = async (formValues: any) => {
     try {
       if (form) {
         const fmData = {
-          firstName: formValues.firstName,
-          lastName: formValues.lastName,
-          phoneNumber: String(formValues.phoneNumber),
-          address: '',
-          dob: formValues.dob,
-          gender: formValues.gender,
-          confirmPassword: formValues.confirmPassword,
-          email: formValues.email,
+          username: formValues.userName,
+          reenterPassword: formValues.confirmPassword,
           password: formValues.password
         }
         const res = await setRegister(fmData)
         if (res) {
-          if (res.message === SUCCESS) {
+          if (res.msg === REGISTER_SUCCESS) {
             message.success('Register account success')
             setVisible(false)
           }
           else {
-            message.error(res.message)
+            message.error(res.msg)
           }
         }
       }
@@ -60,16 +42,9 @@ const ModalRegister = (props: Props) => {
     }
   }
 
-  const hanldeCheckConfirmPassword = (formValues: any) => {
-    if (form) {
-      const password = formValues.password;
-      const confirmPassword = formValues.confirmPassword
-      if (password === confirmPassword) {
-        handleRegister(formValues)
-      } else {
-        message.error('Your password and confirmation password do not match!')
-      }
-    }
+  const handleCloseRegisterModal = () => {
+    form.resetFields()
+    setVisible(false)
   }
 
   return (
@@ -77,6 +52,8 @@ const ModalRegister = (props: Props) => {
       open={visible}
       width={420}
       footer={false}
+      maskClosable={true}
+      closable={false}
       centered
     >
       <div className={styles.formContainer}>
@@ -84,89 +61,34 @@ const ModalRegister = (props: Props) => {
         <Form
           form={form}
           layout='vertical'
-          onFinish={hanldeCheckConfirmPassword}
+          onFinish={handleRegister}
         >
-          <div className={styles.formGroup}>
-            <Form.Item 
-              className={styles.firstItem}
-              name='firstName'
-              label='First name'
-              rules={rules}
-            >
-              <Input
-                placeholder='First name'
-              />
-            </Form.Item>
-            <Form.Item 
-              className={styles.secondItem}
-              name='lastName'
-              label='Last name'
-              rules={rules}
-            >
-              <Input
-                placeholder='Last name'
-              />
-            </Form.Item>
-          </div>
-
-          <div className={styles.formGroup}>
-            <Form.Item 
-              className={styles.firstItem}
-              name='phoneNumber'
-              label='Phone number'
-              rules={rules}
-            >
-              <InputNumber
-                style={{width: '100%'}}
-                placeholder='Phone number'
-              />
-            </Form.Item>
-            <Form.Item 
-              className={styles.datePicker}
-              name='dob'
-              label='Birth day'
-              rules={rules}
-            >
-              <DatePicker 
-                style={{width: 178}}
-              />
-            </Form.Item>
-          </div>
-
           <Form.Item 
-            name='email'
-            label='Email'
-            rules={[
-              { required: true, message: 'Please input your email!' },
-              {
-                required: true,
-                type: "email",
-                message: "The input is not valid E-mail!",
-              }, 
-            ]}
-          >
-            <Input
-              placeholder='Email'
-            />
-          </Form.Item>
-          <Form.Item
-            label='Gender'
-            name='gender'
+            className={styles.firstItem}
+            name='userName'
+            label='User Name'
             rules={rules}
           >
-            <Select
-              placeholder='Select gender'
-            >
-              {genderOption?.map((item: any) =>
-                <Option key={item.id} value={item.value}>{item.name}</Option>
-              )}
-            </Select>
+            <Input
+              placeholder='Enter user name'
+            />
           </Form.Item>
 
           <Form.Item 
             name='password'
             label='Password'
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[
+              { required: true, message: 'Please input your password!' },
+              {
+                validator: async (_, value) => {
+                  if (value) {
+                    if (value.length < 8) {
+                      return Promise.reject(new Error('Password need atleast 8 characters'))
+                    }
+                  }
+                }
+              }
+            ]}
           >
             <Input.Password
               placeholder='Password'
@@ -176,7 +98,19 @@ const ModalRegister = (props: Props) => {
           <Form.Item 
             name='confirmPassword'
             label='Confirm password'
-            rules={[{ required: true, message: 'Please input your confirm password!' }]}
+            rules={[
+              { required: true, message: 'Please input your confirm password!' },
+              {
+                validator: async (_, value) => {
+                  const password = form.getFieldValue('password')
+                  if (value) {
+                    if (value !== password) {
+                      return Promise.reject(new Error('Confirm password cannot match!'))
+                    }
+                  }
+                }
+              }
+            ]}
           >
             <Input.Password
               placeholder='Confirm password'
@@ -185,16 +119,18 @@ const ModalRegister = (props: Props) => {
           <div className={styles.btnGroup}>
             <Button
               className={styles.btnClose}
-              onClick={() => setVisible(false)}
+              onClick={handleCloseRegisterModal}
             >
               Close
             </Button>
-            <Button
-              type={'primary'}
-              htmlType='submit'
+
+            {/* Need to create Component */}
+            <button
+              className='px-2 py-1 rounded-md w-[65px] bg-btnAntd text-white hover:bg-btnHover'
+              type='submit'
             >
               Save
-            </Button>                
+            </button>                
           </div>
         </Form>
       </div>

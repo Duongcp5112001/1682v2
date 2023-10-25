@@ -4,6 +4,7 @@ import Auth from "~/wrapper/Auth";
 const Home = loadable(() => import("~/pages/home"));
 const Posts = loadable(() => import("~/pages/posts/lists"));
 const PostDetails = loadable(() => import("~/pages/posts/[id]"));
+const Friend = loadable(() => import("~/pages/friends"));
 const Game = loadable(() => import("~/pages/game"));
 
 
@@ -15,6 +16,7 @@ const ResetPassword = loadable(() => import("~/pages/resetPassword"));
 export const ROUTES = {
   Home: "/",
   Posts: "/posts",
+  Friend: "/friends",
   Game: "/game",
   PostDetails: (id: number | string) => `/posts/${id}`,
   // no auth
@@ -27,6 +29,13 @@ const routes = [
     exact: true,
     path: ROUTES.Home,
     component: Home,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.Friend,
+    component: Friend,
     layout: Auth,
     isAuth: true,
   },

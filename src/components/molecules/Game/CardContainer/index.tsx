@@ -14,7 +14,8 @@ const CardContainer = () => {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 1fr)',
       gridGap: '1rem',
-      margin: '20px auto'
+      margin: '20px auto',
+      maxWidth: 'fit-content'
     }}>
       {cards.map((card, index) => (
         <Card

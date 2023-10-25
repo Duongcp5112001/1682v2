@@ -240,14 +240,10 @@ const PostList = (props: Props) => {
                     to={`/userProfile/${item.updatedBy?._id}`}
                     // to={`/post/${item._id}
                   >
-                    {`User-${(item?.updatedBy?._id).slice(-6)}`}
+                    {`User-${(item?.updatedBy?._id)?.slice(-6)}`}
                   </Link>
                 }
                 description={(
-                  // <>
-                  //   <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
-                  //   <div>{item.description}</div>
-                  // </>
                   <Link
                     to={`/posts/${item._id}`}
                   >

@@ -128,7 +128,10 @@ export default function Header() {
           <h3 className='my-0 mx-3 text-primary text-lg font-semibold'>Mystic</h3>
         </div>
 
-        <Search className="w-[500px] ml-5 border-primary"/>
+        <Search 
+          className="w-[500px] ml-5 border-primary" 
+          placeholder="Search on Mystic"
+        />
 
         <div className={styles.info}>
           <Dropdown

@@ -6,6 +6,7 @@ export const DATE_VI_FORMAT = "dd/MM/yyyy";
 export const DATE_SIMPLE = "MM/dd";
 
 export const LOGIN_SUCCESS = "Login Success!";
+export const REGISTER_SUCCESS = "Register Success!";
 export const CREATE_POST_SUCCESS = "Create posts Success!";
 
 export const SUCCESS = "Success!";

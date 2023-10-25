@@ -37,6 +37,16 @@
   }
   .postContent {
     margin-top: 20px;
+    .imageContainer {
+      margin-top: 2rem;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      // img {
+      //   width: 30%;
+      //   height: auto;
+      // }
+    }
   }
   .commentContainer{
     :global {

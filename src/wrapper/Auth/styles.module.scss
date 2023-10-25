@@ -26,6 +26,7 @@
       min-height: 93vh;
     }
   }
+
 }
 .friendListContainer{
   float: right;
@@ -38,9 +39,6 @@
     .ant-layout-content {
       background-color: lightgrey;
       height: 93vh;
-      div {
-        align-items: start;
-      }
       .ant-list{
         margin: auto;
         margin-top: 1rem;

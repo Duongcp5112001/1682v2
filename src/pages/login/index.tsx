@@ -75,12 +75,15 @@ const Login = () => {
               <p>
               </p>
               <span>Don't you have an account?</span>
-              <Link to="/register">
-                <Button>Register</Button>
-              </Link>
+              <button 
+                className='bg-btnSecondary px-2 py-1 w-20 rounded-md hover:bg-slate-500'
+                onClick={() => setVisibleModalRegister(true)}
+              >
+                Register
+              </button>
           </div>
           <div className={styles.right}>
-            <h1>Login</h1>
+            <h1 className='text-3xl font-bold text-center'>Login</h1>
             <Form
               form={form}
               layout='vertical'
@@ -103,21 +106,24 @@ const Login = () => {
                 <Input.Password className={styles.formInput}/>
               </Form.Item>
               <Form.Item>
-              <Button 
-                className={styles.btnLogin}
-                type="primary"
-                htmlType="submit"
+              <button 
+                className='bg-violet-400 text-white px-2 py-1 rounded-md w-[380px] hover:bg-violet-300 hover:text-black'
+                type="submit"
               >
                 Login
-              </Button>
+              </button>
               </Form.Item>
             </Form>
-            <Link to={ROUTES.ResetPassword} style={{ textDecoration: "none" , color:"grey" }}>
-                <p>Don't remember your password?</p>
+            <Link to={ROUTES.ResetPassword} style={{ textDecoration: "none", color:"grey" }}>
+                Don't remember your password?
             </Link>
           </div>
         </div>
       </div>
+      <ModalRegister
+        visible={visibleModalRegister}
+        setVisible={setVisibleModalRegister}
+      />
     </>
   )
 }
