@@ -1,27 +1,24 @@
-import React, { useMemo, useState } from "react";
-
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-
 import { Avatar, Layout, MenuProps, theme } from "antd";
-
+import { RootState, useAppSelector } from "~/store";
+import { UserRole } from "~/utils/constant";
 import { ROUTES } from "~/routes";
-
-import styles from "./styles.module.scss";
-import {
-  LaptopOutlined,
-  TagOutlined,
-  UsergroupAddOutlined,
-} from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
+
 import Header from "~/components/molecules/Header";
 import Sider from "antd/es/layout/Sider";
 import history from "~/utils/history";
 import SideNav from "~/components/molecules/Sidebar";
-import { RootState, useAppSelector } from "~/store";
-import { UserRole } from "~/utils/constant";
 import FriendList from "~/components/molecules/FriendList";
 import AdsList from "~/components/molecules/AdsList";
 
+import friendsIcon from '~/assets/images/friendsIcon.svg';
+import groupsIcon from '~/assets/images/groupIcon.svg';
+import gameIcon from '~/assets/images/gameIcon.svg';
+
+import styles from "./styles.module.scss";
+import Svg from "~/components/atoms/Svg";
 type MenuItem = Required<MenuProps>["items"][number];
 interface Props {
   children?: React.ReactNode | React.ReactNode[];
@@ -39,7 +36,7 @@ function Auth(props: Props) {
   const menuLeft: MenuItem[] = useMemo(
     () => [
       {
-        key: '1',
+        key: ROUTES.MemberProfile(userData?._id),
         label: 
           <Link
             style={{display: "flex"}}
@@ -47,26 +44,28 @@ function Auth(props: Props) {
           >
             <Avatar src={userData?.avatar}/>
             <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
-          </Link>
+          </Link>,
+        url: ROUTES.MemberProfile(userData?._id),
+        content: "My Profile",
       },
       {
         key: ROUTES.Friend,
         label: <Link to={''}>Friend</Link>,
-        icon: <UsergroupAddOutlined  style={{ fontSize: "18px" }} />,
+        icon: <Svg src={friendsIcon} className="w-5"/>,
         url: ROUTES.Friend,
         content: "Friend",
       },
       {
-        key: '2',
+        key: ROUTES.Groups,
         label: <Link to={''}>Group</Link>,
-        icon: <TagOutlined  style={{ fontSize: "18px" }} />,
-        url: 'ROUTES.Group',
-        content: "Group",
+        icon: <Svg src={groupsIcon} className="w-5"/>,
+        url: ROUTES.Groups,
+        content: "Groups",
       },
       {
         key: ROUTES.Game,
         label: <Link to={ROUTES.Game}>Game</Link>,
-        icon: <LaptopOutlined  style={{ fontSize: "18px" }} />,
+        icon: <Svg src={gameIcon} className="w-5" />,
         url: ROUTES.Game,
         content: "Game",
       },

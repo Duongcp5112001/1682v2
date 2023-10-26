@@ -64,7 +64,8 @@ const ModalPost = (props: Props) => {
       const {document, ...rest} = formValues;
       const fmData = {
         ...rest,
-        image: metadataList
+        image: metadataList,
+        isAnonymous: isAnonymous
       }
       if (postData) {
         res = await updatePost(postData._id, fmData)
@@ -124,7 +125,8 @@ const ModalPost = (props: Props) => {
   useEffect(() => {
     if (postData) {
       form.setFieldsValue({
-        content: postData.content
+        content: postData.content,
+        isAnonymous: isAnonymous
       })
       setFileList(postData.images)
     }

@@ -5,8 +5,9 @@ import { ROUTES } from "~/routes";
 
 import history from "~/utils/history";
 import loadable from "~/utils/loadable";
-import iconNotification from "~/assets/images/iconNotification.svg";
-import iconAvatar from "~/assets/images/iconAvatar.svg";
+import iconNotification from "~/assets/images/bellIcon.svg";
+import logoutIcon from "~/assets/images/logoutIcon.svg";
+import profileIcon from "~/assets/images/profileIcon.svg";
 import logo from "~/assets/images/logo_transparent.png";
 
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
@@ -46,7 +47,7 @@ export default function Header() {
   };
 
   const showProfile = () => {
-    // history.push(ROUTES.Profile);
+    history.push(ROUTES.MemberProfile(me?._id));
   };
 
   const handleSetting = () => {
@@ -60,7 +61,11 @@ export default function Header() {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <div onClick={showProfile}>Profile</div>,
+      label: 
+      <div onClick={showProfile} className="flex">
+        <Svg src={profileIcon} className='w-5 mr-2'/>
+        Profile
+      </div>,
     },
     me &&
       me.role &&
@@ -79,7 +84,11 @@ export default function Header() {
     },
     {
       key: "4",
-      label: <div onClick={logout}>Logout</div>,
+      label: 
+      <div onClick={logout} className="flex">
+        <Svg src={logoutIcon} className='w-5 mr-2'/>
+        Logout
+      </div>,
     },
   ];
 

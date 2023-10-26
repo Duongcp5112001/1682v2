@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     const data: any = error.response?.data;
     // Error code from BE for 403
-    if (data?.errorCode === '13' || data?.msg !== 'Authorization forbidden') {
+    if (data?.errorCode === '13' && data?.msg !== 'Authorization forbidden') {
       handleLogout(ROUTES.Login)
     }
   }

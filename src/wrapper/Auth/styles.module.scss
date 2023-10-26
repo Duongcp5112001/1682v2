@@ -52,6 +52,9 @@
     }
     .ant-menu {
       height: 50% !important;
+      .ant-menu-item-only-child {
+        padding-left: 12px !important;
+      }
     }
   }
   .adsContainer {
