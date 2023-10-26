@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { setRegister } from '~/api/register';
 import { Gender, REGISTER_SUCCESS, SUCCESS } from '~/utils/constant';
 import styles from './styles.module.scss';
+import TailwindButton from '~/components/atoms/TailwindButton';
 
 interface Props{
   visible: boolean;
@@ -124,13 +125,13 @@ const ModalRegister = (props: Props) => {
               Close
             </Button>
 
-            {/* Need to create Component */}
-            <button
-              className='px-2 py-1 rounded-md w-[65px] bg-btnAntd text-white hover:bg-btnHover'
-              type='submit'
+            <TailwindButton
+              htmlType='submit'
+              type='primary'
+              className='w-[65px]'
             >
               Save
-            </button>                
+            </TailwindButton>                
           </div>
         </Form>
       </div>

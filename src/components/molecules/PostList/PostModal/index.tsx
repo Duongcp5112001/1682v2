@@ -14,6 +14,7 @@ import storage from '~/utils/firebase';
 
 import Select from '~/components/atoms/Select'
 import { RcFile, UploadFile } from 'antd/es/upload'
+import TailwindButton from '~/components/atoms/TailwindButton'
 
 interface Props {
   postData?: any;
@@ -23,11 +24,11 @@ interface Props {
 }
 
 const ModalPost = (props: Props) => {
-  const [form] = Form.useForm();
   const { Dragger } = Upload;
   const {visible, setVisible, afterSuccess, postData} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const rules = [{ required: true, message: '' }];
+  const [form] = Form.useForm();
   
   const [metadataList, setMetadataList] = useState<any>('');
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -135,6 +136,7 @@ const ModalPost = (props: Props) => {
       centered
       open={visible}
       footer={false}
+      forceRender
       closable={false}
       onCancel={handleClose}
       maskClosable
@@ -215,13 +217,13 @@ const ModalPost = (props: Props) => {
         </Dragger>
       </div>
       <div className={styles.btnGroup}>
-        <Button
-          className={styles.btnPost}
+        <TailwindButton
           type={'primary'}
           htmlType='submit'
+          className='w-100'
         >
           Post
-        </Button>                
+        </TailwindButton>                
       </div>
     </Form>
     <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
