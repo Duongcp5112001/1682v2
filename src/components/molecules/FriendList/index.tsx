@@ -5,7 +5,7 @@ import { useFriends } from "~/hooks/useFriends";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
 import defaultAvatar from '~/assets/images/defaultUser.png'
 import Spin from "~/components/atoms/Spin";
-// import ChatModal from "~/components/atoms/ChatModal";
+import ChatModal from "~/components/atoms/ChatModal";
 import { setMessages, setReceiver } from "~/store/chatMessages";
 // import { getMessages } from "~/api/user";
 import type { MenuProps } from 'antd';
@@ -18,9 +18,10 @@ const FriendList = () => {
   const token = getCookie('token')
   const [open, setOpen] = useState<boolean>(false);
   const [receiverName, setReceiverName] = useState<string>("");
+  const [visibleChatModal, setVisibelChatModal] = useState(false);
   const { data, isLoading, isFetching } = useFriends(token);
 
-  const friends = data?.data?.data || [];
+  const friends = data?.data?.member?.friends;
   const onClose = () => {
     setOpen(false);
   };
@@ -69,6 +70,10 @@ const FriendList = () => {
   //   return messages[messages.length - 1].content;
   // };
 
+  const handleShowChatModal = () => {
+    setVisibelChatModal(true)
+  }
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -76,40 +81,33 @@ const FriendList = () => {
         dataSource={friends}
         renderItem={(item: any) => (
           <List.Item
-            key={item?._id}
+            key={item?.friendId?._id}
             className={styles.friendItem}
-            onClick={() => {
-              setReceiverName(
-                () => ''
-              );
-              // handleClick(item.user._id);
-            }}
+            onClick={handleShowChatModal}
           >
             {/* Show only the avatar when screen size is small */}
             <div className={styles.avatarContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={30} src={defaultAvatar} />}
+                avatar={<Avatar size={30} src={item?.friendId?.avatar} />}
               />
             </div>
 
             {/* Show the name and last message when screen size is large */}
             <div className={styles.detailsContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={40} src={defaultAvatar} />}
-                title={''}
+                avatar={<Avatar size={40} src={item?.friendId?.avatar} />}
+                title={item?.friendId?.username}
                 // description={getLastMessage(item?.user?._id)}
               />
             </div>
           </List.Item>
         )}
       />
-{/* 
+
       <ChatModal
-        open={open}
-        onClose={onClose}
-        userId={userData?._id}
-        receiverName={receiverName}
-      /> */}
+        visible={visibleChatModal}
+        setVisible={setVisibelChatModal}
+      />
     </Spin>
   );
 };

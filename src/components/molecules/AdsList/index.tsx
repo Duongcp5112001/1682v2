@@ -4,6 +4,8 @@ import { Carousel } from 'antd'
 import { useAdsList } from '~/hooks/useAds'
 import { getCookie } from '~/utils/cookie'
 import Spin from '~/components/atoms/Spin'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '~/routes'
 
 const AdsList = () => {
   const token = getCookie('token')
@@ -21,6 +23,15 @@ const AdsList = () => {
           </div>
         )
         }
+        
+        {/* Contact with admin for ads slot */}
+        {/* <Link to={ROUTES.Contact}>
+          <div className='flex justify-center items-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-[350px]'>
+            <div className='text-white text-2xl font-semibold text-center'>
+              Click here <br /> to place an ad
+            </div>
+          </div>
+        </Link> */}
       </Carousel>
     </Spin>
         

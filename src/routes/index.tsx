@@ -7,6 +7,7 @@ const Groups = loadable(() => import("~/pages/groups/lists"));
 const Posts = loadable(() => import("~/pages/posts/lists"));
 const PostDetails = loadable(() => import("~/pages/posts/[id]"));
 const Friend = loadable(() => import("~/pages/friends"));
+const Contact = loadable(() => import("~/pages/contactAdmin"));
 const Game = loadable(() => import("~/pages/game"));
 
 
@@ -20,6 +21,7 @@ export const ROUTES = {
   Posts: "/posts",
   Friend: "/friends",
   Groups: "/groups",
+  Contact: "/contact",
   Game: "/game",
   MemberProfile: (id: number | string) => `/profile/${id}`,
   PostDetails: (id: number | string) => `/posts/${id}`,
@@ -75,6 +77,13 @@ const routes = [
     exact: true,
     path: ROUTES.Game,
     component: Game,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.Contact,
+    component: Contact,
     layout: Auth,
     isAuth: true,
   },

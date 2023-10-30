@@ -23,17 +23,20 @@ import Meta from 'antd/es/card/Meta'
 import ModalEditComment from '~/components/atoms/ModalEditComment'
 import ModalPost from '../PostModal'
 import defaultUser from '~/assets/images/defaultUser.png'
+import menuIcon from '~/assets/images/menuIcon.svg'
 
 import styles from './styles.module.scss'
+import Svg from '~/components/atoms/Svg'
 interface Props {
   dataPosts?: any;
   isLoading?: boolean;
   isFetching?: boolean;
   refetch: () => void;
+  maxHeight?: string;
 }
 
 const PostList = (props: Props) => {
-  const { dataPosts, isFetching, isLoading, refetch } = props;
+  const { dataPosts, isFetching, isLoading, refetch, maxHeight } = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
@@ -186,7 +189,7 @@ const PostList = (props: Props) => {
         className={styles.listContainer}
         itemLayout="vertical"
         size="small"
-        style={{ maxHeight: '65vh', overflowY: 'scroll' }}
+        style={{ maxHeight: maxHeight || '75vh', overflowY: 'scroll' }}
         dataSource={dataSource}
         renderItem={(item: any) => (
           <div key={item._id}>
@@ -232,7 +235,15 @@ const PostList = (props: Props) => {
                   }
                 />
               ]}
-              // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
+              extra={
+                <div>
+                  { item?.updatedBy?._id === userData?._id ?
+                    <Svg className='w-6' src={menuIcon} onClick={() => handleEditPost(item)}/>
+                    : null
+                  }
+
+                </div>
+              }
             >
               <Meta
                 avatar={<Avatar size={42} src={item?.updatedBy?.avatar} />}
@@ -282,7 +293,7 @@ const PostList = (props: Props) => {
                           }
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
-                      {(comment.createdBy._id === userData?._id) ?
+                      {(comment.createdBy === userData?._id) ?
                         <Dropdown
                           menu={
                             {
@@ -307,7 +318,7 @@ const PostList = (props: Props) => {
                           <div
                             className={styles.commentOption}
                           >
-                            <EllipsisOutlined />
+                            <Svg src={menuIcon} className='w-5' />
                           </div>
                         </Dropdown>
                         : null
@@ -339,13 +350,13 @@ const PostList = (props: Props) => {
           </div>
         )}
       />
-      {/* <ModalEditComment
+      <ModalEditComment
         visible={visibleModalEditComment}
         setVisivle={setVisibleModalEditComment}
         postId={itemEditComment?.postId}
         commentId={itemEditComment?.commentId}
         refetch={refetch}
-      /> */}
+      />
       <ModalPost
         postData={postEditing}
         visible={visibleModalEditPost}

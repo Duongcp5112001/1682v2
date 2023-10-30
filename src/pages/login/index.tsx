@@ -13,8 +13,8 @@ import styles from './styles.module.scss';
 import ModalRegister from '~/components/molecules/ModalRegister';
 import { useAppDispatch } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
+import Spin from '~/components/atoms/Spin';
 
-const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -68,6 +68,7 @@ const Login = () => {
   
   return (
     <>
+    <Spin spinning={loading}>
       <div className={styles.login}>
         <div className={styles.card}>
           <div className={styles.left}>
@@ -120,6 +121,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+    </Spin>
       <ModalRegister
         visible={visibleModalRegister}
         setVisible={setVisibleModalRegister}

@@ -40,6 +40,7 @@
     font-style: italic;
   }
   .commentContainer{
+    padding-bottom: 1rem;
     :global {
       .ant-form-item{
         margin: 0 !important;
@@ -47,6 +48,7 @@
     }
     .commentArea {
       padding: 0px 20px;
+      
     }
     .comment{ 
       display: flex;

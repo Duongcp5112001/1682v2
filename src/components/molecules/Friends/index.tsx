@@ -1,4 +1,4 @@
-import { List } from 'antd'
+import { List, Spin } from 'antd'
 import React from 'react'
 import { useFriends } from '~/hooks/useFriends'
 import { getCookie } from '~/utils/cookie'
@@ -10,17 +10,18 @@ const Friends = () => {
   const {data, isLoading, isFetching} = useFriends(token)
   const friends = data?.data?.member?.friends || [];
 
-  console.log(friends)
   return (
-    <List
-      grid={{ gutter: 16, column: 4 }}
-      dataSource={friends}
-      renderItem={(item: any) => (
-        <List.Item key={item?._id}>
-          <FriendCard friendData={item}/>
-        </List.Item>
-      )}
-    />
+    <Spin spinning={isLoading || isFetching}>
+      <List
+        grid={{ gutter: 16, column: 4 }}
+        dataSource={friends}
+        renderItem={(item: any) => (
+          <List.Item key={item?._id}>
+            <FriendCard friendData={item}/>
+          </List.Item>
+        )}
+      />
+    </Spin>
   )
 }
 

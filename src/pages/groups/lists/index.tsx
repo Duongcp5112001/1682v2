@@ -1,9 +1,12 @@
 import React from 'react'
+import GroupList from '~/components/molecules/GroupList'
 
-const GroupList = () => {
+const Group = () => {
   return (
-    <div>GroupList</div>
+    <>
+      <GroupList/>
+    </>
   )
 }
 
-export default GroupList
+export default Group

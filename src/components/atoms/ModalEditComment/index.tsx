@@ -8,7 +8,6 @@ import { editPostComment } from '~/api/post';
 
 interface Props {
   commentId: string;
-  bookId?: string;
   postId?: string;
   visible: boolean,
   setVisivle: (value: boolean) => void;
@@ -16,7 +15,7 @@ interface Props {
 }
 
 const ModalEditComment = (props: Props) => {
-  const {visible, setVisivle, refetch, commentId, bookId, postId} = props;
+  const {visible, setVisivle, refetch, commentId, postId} = props;
   const [form] = Form.useForm();
   const rules = [{ required: true, message: '' }];
 
@@ -49,7 +48,7 @@ const ModalEditComment = (props: Props) => {
       footer={false}
     >
       <div>
-        <h3>Edit comment</h3>
+        <h3 className='text-xl mb-2 font-semibold'>Edit comment</h3>
         <Form
           form={form}
           autoComplete='off'

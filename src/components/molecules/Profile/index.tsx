@@ -28,7 +28,6 @@ const Profile = ({id}: Props) => {
   const token = getCookie("token");
   const { data, isLoading, isFetching } = useMember(token);
   const memberData = data?.member;
-  
   const [adding, setAdding] = useState(false);
   const me = useAppSelector((state) => state.userInfo.userData);
   const [openChat, setOpenChat] = useState(false);

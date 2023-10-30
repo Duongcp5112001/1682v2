@@ -125,10 +125,10 @@ const ModalPost = (props: Props) => {
   useEffect(() => {
     if (postData) {
       form.setFieldsValue({
-        content: postData.content,
+        description: postData.description,
         isAnonymous: isAnonymous
       })
-      setFileList(postData.images)
+      setFileList(postData?.image ? [{ url: postData.image }] : [])
     }
   }, [postData])
   
