@@ -27,6 +27,7 @@ import menuIcon from '~/assets/images/menuIcon.svg'
 
 import styles from './styles.module.scss'
 import Svg from '~/components/atoms/Svg'
+import { checkForbiddenWord, encryptionUserName } from '~/utils/helper'
 interface Props {
   dataPosts?: any;
   isLoading?: boolean;
@@ -250,10 +251,10 @@ const PostList = (props: Props) => {
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
-                    to={`/userProfile/${item.updatedBy?._id}`}
+                    to={`/profile/${item.updatedBy?._id}`}
                     // to={`/post/${item._id}
                   >
-                    {`User-${(item?.updatedBy?._id)?.slice(-6)}`}
+                    {encryptionUserName(item?.updatedBy?.username)}
                   </Link>
                 }
                 description={(

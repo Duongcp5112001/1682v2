@@ -10,6 +10,7 @@ import { setMessages, setReceiver } from "~/store/chatMessages";
 // import { getMessages } from "~/api/user";
 import type { MenuProps } from 'antd';
 import { getCookie } from "~/utils/cookie";
+import { encryptionUserName } from "~/utils/helper";
 
 
 // type MenuItem = Required<MenuProps>['items'][number];
@@ -96,7 +97,7 @@ const FriendList = () => {
             <div className={styles.detailsContainer}>
               <List.Item.Meta
                 avatar={<Avatar size={40} src={item?.friendId?.avatar} />}
-                title={item?.friendId?.username}
+                title={encryptionUserName(item?.friendId?.username)}
                 // description={getLastMessage(item?.user?._id)}
               />
             </div>

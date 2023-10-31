@@ -58,9 +58,32 @@ export const handleLogout = (callbackUrl = ROUTES.Home) => {
   }
 };
 
-export const formatter = (price: number) => {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(price);
+export const encryptionUserName = (userName: string) => {
+  let encryptedString = "";
+    let count = 0;
+    
+    for (let i = 0; i < userName?.length; i++) {
+        if (i === 1 || i === 3 || i === 6 || i === 8) {
+            encryptedString += "*";
+            count++;
+        } else {
+            encryptedString += userName[i];
+        }
+    }
+    
+  return encryptedString;
+}
+
+export const checkFriend = (me: any, member: any) => {
+  const isFriend = me?.friends.find((item: any) => item?.friendId === member?._id)
+  if (isFriend) {
+    return true;
+  } else {
+    return false
+  }
+}
+
+
+export const checkForbiddenWord = (content: any) => {
+  return content.replace('test', '****')
 }

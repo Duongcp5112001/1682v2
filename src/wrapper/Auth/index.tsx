@@ -33,6 +33,7 @@ function Auth(props: Props) {
   const userData = useAppSelector(
     (state: RootState) => state.userInfo.userData
   );
+
   const menuLeft: MenuItem[] = useMemo(
     () => [
       {

@@ -1,11 +1,11 @@
-import { Avatar, Button, Col, Divider, Row, Tabs, TabsProps, Tooltip, Typography, message } from 'antd';
+import { Avatar, Button, Col, Divider, Row, Tabs, TabsProps, Tooltip, Typography, Upload, message } from 'antd';
 import React, { useState } from 'react'
 import { UserOutlined, WarningOutlined } from '@ant-design/icons';
 import Spin from '~/components/atoms/Spin';
 import styles from './styles.module.scss'
 import { addFriend } from '~/api/friend';
 import { SUCCESS, UserRole } from '~/utils/constant';
-import {UserDeleteOutlined} from '@ant-design/icons'
+import {CameraOutlined} from '@ant-design/icons'
 import { RootState, useAppDispatch, useAppSelector } from '~/store';
 import Infomations from './Infomations';
 import Friends from './Friends';
@@ -15,20 +15,28 @@ import Post from './Post';
 import ModalConfirm from '~/components/atoms/ModalConfirm';
 import Input from '~/components/atoms/Input';
 import { Authorization } from '~/wrapper/Authorization';
-import { useMember } from '~/hooks/useMember';
+import { useMember, useMemberById } from '~/hooks/useMember';
 import { getCookie } from '~/utils/cookie';
 import { setReceiver } from '~/store/chatMessages';
 import { usePostByMemberId } from '~/hooks/usePost';
-
+import { getDownloadURL, getMetadata, ref, uploadBytesResumable } from 'firebase/storage';
+import storage from '~/utils/firebase';
+import { updateAvatar, updateCoverImage, updateProfile } from '~/api/member';
+import addFriendIcon from '~/assets/images/addFriendIcon.svg'
+import Svg from '~/components/atoms/Svg';
+import { checkFriend, encryptionUserName } from '~/utils/helper';
+import { setStateRefetchUser } from '~/store/stateRefetchApi';
+import { Any } from '@react-spring/web';
 interface Props {
   id?: string;
 }
 
 const Profile = ({id}: Props) => {
   const token = getCookie("token");
-  const { data, isLoading, isFetching } = useMember(token);
+  const { data, isLoading, isFetching, refetch} = useMemberById({memberId: id});
   const memberData = data?.member;
   const [adding, setAdding] = useState(false);
+  const [loadingUpload, setLoadingUpload] = useState(false);
   const me = useAppSelector((state) => state.userInfo.userData);
   const [openChat, setOpenChat] = useState(false);
   const [visibleModalConfirm, setVisibleModalConfirm] = useState(false);
@@ -104,20 +112,132 @@ const Profile = ({id}: Props) => {
   //   }
   // }
 
+  const uploadFileToFirebase = async (doc: any, type: string) => {
+    setLoadingUpload(true)
+    const file = doc?.file;
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    try {
+      // Wait for the upload to finish
+      const snapshot = await uploadTask;
+      
+      // Get the metadata using getMetadata() method
+      const metadata = await getMetadata(storageRef);
+  
+      // Create the result object with metadata and download URL
+      // Set the result in the state
+      // setMetaData(result);
+      if (type === 'avatar') {
+        const result = {
+          accountAvatarUpdate: await getDownloadURL(snapshot.ref)
+        };
+        const res = await updateAvatar(id, result);
+        if (res.msg === SUCCESS) {
+          refetch();
+        } else {
+          message.error("Upload image failed");
+        }
+      } else {
+        const result = {
+          accountCoverImageUpdate: await getDownloadURL(snapshot.ref)
+        };
+        const res = await updateCoverImage(id, result);
+        if (res.msg === SUCCESS) {
+          refetch();
+        } else {
+          message.error("Upload image failed");
+        }
+      }
+      dispatch(setStateRefetchUser(true))
+      setLoadingUpload(false)
+    } catch (error: any) {
+      console.error(error);
+      setLoadingUpload(false)
+    }
+  };
+
+  const handleAddFriend = async () => {
+    try {
+      const res = await addFriend(id, {memberId: me?._id})
+      if (res) {
+        if (res.msg === SUCCESS) {
+          message.success('Add friend success')
+          refetch()
+        } else {
+          message.error('Add friend fail please try again!')
+        }
+      }
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+
   return (
-    <Spin spinning={isLoading || isFetching}>
+    <Spin spinning={isLoading || isFetching || loadingUpload}>
       <div className={styles.profileContainer}>
         <div className={styles.images}>
-          <img
-            src={memberData?.coverImage}
-            alt=""
-            className={styles.cover}
-          />
-          <img
-            src={memberData?.avatar}
-            className={styles.profilePic}
-            alt=""
-          />
+          <div className='relative h-[220px]'>
+            <img
+              src={memberData?.coverImage}
+              alt="cover-image"
+              className={styles.cover}
+            />
+            { memberData?._id === me?._id ?
+              <Upload
+                className='absolute right-5 bottom-5 max-w-fit'
+                showUploadList={false}
+                accept="image/*"
+                customRequest={(file: any) => uploadFileToFirebase(file, 'cover')}
+              >
+                <Button
+                  className='bg-slate-400 z-50'
+                  icon={<CameraOutlined />}
+                  type='primary'
+                >
+                  Edit the cover
+                </Button>
+              </Upload>
+              : null
+            }
+          </div>
+          <div
+            className={`${styles.uploadAvatar} absolute top-[170px] w-100 object-cover`}
+          >
+            <div className='w-100 flex justify-center'>
+            { memberData?._id === me?._id ?
+              <Upload
+                listType="picture-circle"
+                // onChange={handleChange}
+                showUploadList={false}
+                accept="image/*"
+                customRequest={(file: any) => uploadFileToFirebase(file, 'avatar')}              
+              >
+                <img
+                  className='rounded-[50%] object-cover h-[110px] w-[110px]'
+                  src={memberData?.avatar}
+                />
+              </Upload>
+              :
+                <img
+                  className={styles.profilePic}
+                  src={memberData?.avatar}
+                />
+              }
+            </div>
+            <div className='flex text-base font-semibold justify-center'>
+              { memberData?._id === me?._id 
+                ? memberData?.username 
+                :
+                <div className='flex'>
+                  {encryptionUserName(memberData?.username)}
+                  { checkFriend(me, memberData) ? null :
+                    <Svg onClick={handleAddFriend} className='w-5 ml-3' src={addFriendIcon}/>
+                  }
+                </div>
+              }
+            </div>
+          </div>
         </div>
         {/* <div className={styles.btnGroup}>
           { me && me?.following?.find((item: any) => (item.user._id === userId)) ? 
@@ -136,7 +256,7 @@ const Profile = ({id}: Props) => {
         </div> */}
       </div>
 
-      <Tabs defaultActiveKey="1" items={items} className='mt-[80px]' />
+      <Tabs defaultActiveKey="1" items={items} className='mt-[100px]' />
     </Spin>
 
   );

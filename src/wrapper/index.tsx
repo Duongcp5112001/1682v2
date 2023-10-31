@@ -5,13 +5,14 @@ import routes, { ROUTES } from "~/routes";
 import Blank from "~/layouts";
 import { getCookie } from "~/utils/cookie";
 import NotFound from "~/pages/404";
-import { useAppDispatch } from "~/store";
+import { RootState, useAppDispatch, useAppSelector } from "~/store";
 import { useMember } from "~/hooks/useMember";
 import { setUserInfo, setUserMessages } from "~/store/userInfo";
 import { setUserId } from "~/store/chatMessages";
 import { message } from "antd";
 import { getSelfNotification } from "~/api/notification";
 import { setAllNotifications } from "~/store/notification";
+import { setStateRefetchUser } from "~/store/stateRefetchApi";
 // import { socket } from "~/socket";
 
 function Wrapper() {
@@ -19,7 +20,20 @@ function Wrapper() {
   const userId = getCookie("userId");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: dataMember } = useMember(token);
+
+
+
+  const refetchApi = useAppSelector(
+    (state: RootState) => state.refetchApi.stateRefetchUser
+  );
+
+  const { data: dataMember, refetch } = useMember(token);
+  useEffect(() => {
+    refetch();
+    dispatch(setStateRefetchUser(false))
+  }, [refetchApi])
+  
+
   // useEffect(() => {
   //   const getSelfMessages = async () => {
   //     try {

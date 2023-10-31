@@ -144,12 +144,12 @@ const ModalPost = (props: Props) => {
       maskClosable
       className={styles.modalContainer}
     >
-    <div>
-      <h3>Create your post</h3>
+    <div className='text-center'>
+      <h3 className='text-xl font-semibold'>Create your post</h3>
     </div>
     <Meta
       className={styles.metaUser}
-      avatar={<Avatar size={54} src={'https://joesch.moe/api/v1/random'}/>}
+      avatar={<Avatar size={54} src={userData?.avatar}/>}
       title={
         <div className={styles.titleGroup}>
           <strong>{userData?.firstName} {userData?.lastName}</strong>
