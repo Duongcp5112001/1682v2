@@ -58,10 +58,9 @@ const GroupList = () => {
               header={<div className='text-xl font-semibold'>Your groups</div>}
               renderItem={(item: any) => (
                 <List.Item
-                  onClick={() => handleNavigate(item?._id)}
                   key={item?._id}
                 >
-                  <GroupCard myGroup={true} refetch={refetch} group={item}/>
+                  <GroupCard onClick={() => handleNavigate(item?._id)} myGroup={true} refetch={refetch} group={item}/>
                 </List.Item>
               )}
             />
