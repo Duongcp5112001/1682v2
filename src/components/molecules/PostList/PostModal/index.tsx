@@ -1,31 +1,35 @@
 import { Avatar, Button, Form, Upload, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { TextArea } from '~/components/atoms/Input'
-import Modal from '~/components/atoms/Modal'
-import styles from './styles.module.scss'
 import { InboxOutlined } from '@ant-design/icons';
-import Meta from 'antd/es/card/Meta'
 import { useAppSelector } from '~/store'
 import { setPost, updatePost } from '~/api/post'
 import { CREATE_POST_SUCCESS, KEY_MESSAGE, SUCCESS } from '~/utils/constant'
 import { Option } from '~/components/atoms/Select';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
-import storage from '~/utils/firebase';
+import { RcFile, UploadFile } from 'antd/es/upload';
 
+import storage from '~/utils/firebase';
+import Meta from 'antd/es/card/Meta'
 import Select from '~/components/atoms/Select'
-import { RcFile, UploadFile } from 'antd/es/upload'
-import TailwindButton from '~/components/atoms/TailwindButton'
+import loadable from '~/utils/loadable'
+import styles from './styles.module.scss'
+import { createPost } from '~/api/groups';
+
+const TailwindButton = loadable(() => import("~/components/atoms/TailwindButton"));
+const Modal = loadable(() => import("~/components/atoms/Modal"));
 
 interface Props {
   postData?: any;
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   afterSuccess?: () => void;
+  groupId?: any;
 }
 
 const ModalPost = (props: Props) => {
   const { Dragger } = Upload;
-  const {visible, setVisible, afterSuccess, postData} = props;
+  const {visible, setVisible, afterSuccess, postData, groupId} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const rules = [{ required: true, message: '' }];
   const [form] = Form.useForm();
@@ -67,22 +71,40 @@ const ModalPost = (props: Props) => {
         image: metadataList,
         isAnonymous: isAnonymous
       }
-      if (postData) {
-        res = await updatePost(postData._id, fmData)
-      } else {
-        res = await setPost(fmData)
-      }
-      if (res.msg === CREATE_POST_SUCCESS) {
-        message.success({
-          content: postData ? 'Update post success' : 'Add post success'
-        })
-        if (afterSuccess) {
-          afterSuccess()
+      if (groupId) {
+        if (postData) {
+          res = await updatePost(postData._id, fmData)
+        } else {
+          res = await createPost(groupId,fmData)
         }
-        form.resetFields();
-        setVisible(false)
+        if (res.msg === CREATE_POST_SUCCESS) {
+          message.success({
+            content: postData ? 'Update post success' : 'Add post success'
+          })
+          if (afterSuccess) {
+            afterSuccess()
+          }
+          form.resetFields();
+          setVisible(false)
+        }
       } else {
-        message.error(res.error)
+        if (postData) {
+          res = await updatePost(postData._id, fmData)
+        } else {
+          res = await setPost(fmData)
+        }
+        if (res.msg === CREATE_POST_SUCCESS) {
+          message.success({
+            content: postData ? 'Update post success' : 'Add post success'
+          })
+          if (afterSuccess) {
+            afterSuccess()
+          }
+          form.resetFields();
+          setVisible(false)
+        } else {
+          message.error(res.error)
+        }
       }
     } catch (error) {
       console.log(error)

@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
-import Modal from '~/components/atoms/Modal';
 import { Button, Form, Input, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-
 import { setRegister } from '~/api/register';
-import { Gender, REGISTER_SUCCESS, SUCCESS } from '~/utils/constant';
-import styles from './styles.module.scss';
-import TailwindButton from '~/components/atoms/TailwindButton';
+import { REGISTER_SUCCESS } from '~/utils/constant';
 
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss';
+
+const TailwindButton = loadable(() => import("~/components/atoms/TailwindButton"));
+const Modal = loadable(() => import("~/components/atoms/Modal"));
 interface Props{
   visible: boolean;
   setVisible: (value: boolean) => void;

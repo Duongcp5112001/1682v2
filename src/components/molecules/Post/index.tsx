@@ -1,12 +1,10 @@
 import React from 'react';
-import styles from './styles.module.scss';
-import { usePosts } from '~/hooks/usePost';
-import { getCookie } from '~/utils/cookie';
 import { Link } from 'react-router-dom';
 import { useMemberById } from '~/hooks/useMember';
 import {
   LikeOutlined,
 } from '@ant-design/icons';
+import styles from './styles.module.scss';
 
 interface Props {
   postData: any;

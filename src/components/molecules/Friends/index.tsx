@@ -1,13 +1,15 @@
-import { List, Spin } from 'antd'
 import React from 'react'
+import { List, Spin } from 'antd'
 import { useFriends } from '~/hooks/useFriends'
 import { getCookie } from '~/utils/cookie'
-import FriendCard from './FriendCard'
+import loadable from '~/utils/loadable'
+
+const FriendCard = loadable(() => import("~/components/molecules/Friends/FriendCard"));
 
 const Friends = () => {
   const token = getCookie('token')
 
-  const {data, isLoading, isFetching} = useFriends(token)
+  const {data, isLoading, isFetching, refetch} = useFriends(token)
   const friends = data?.data?.member?.friends || [];
 
   return (
@@ -17,7 +19,7 @@ const Friends = () => {
         dataSource={friends}
         renderItem={(item: any) => (
           <List.Item key={item?._id}>
-            <FriendCard friendData={item}/>
+            <FriendCard refetch={refetch} friendData={item}/>
           </List.Item>
         )}
       />

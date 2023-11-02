@@ -1,11 +1,12 @@
 import React from 'react'
 import { Carousel } from 'antd'
-
 import { useAdsList } from '~/hooks/useAds'
 import { getCookie } from '~/utils/cookie'
-import Spin from '~/components/atoms/Spin'
-import { Link } from 'react-router-dom'
-import { ROUTES } from '~/routes'
+
+import loadable from '~/utils/loadable'
+
+const Spin = loadable(() => import("~/components/atoms/Spin"));
+
 
 const AdsList = () => {
   const token = getCookie('token')

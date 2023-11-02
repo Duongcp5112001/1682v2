@@ -5,7 +5,9 @@ import Profile from '~/components/molecules/Profile'
 const MemberProfile = () => {
   const { id } = useParams();
   return (
-    <Profile id={id}/>
+    <div className='overflow-y-scroll'>
+      <Profile id={id}/>
+    </div>
   )
 }
 

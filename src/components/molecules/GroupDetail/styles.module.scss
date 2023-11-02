@@ -1,0 +1,65 @@
+.profileContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  justify-content: space-between;
+  .images {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    .uploadAvatar {
+      :global {
+        .ant-upload-select {
+          width: 110px !important;
+          height: 110px !important;
+          margin: 0 !important;
+        }
+        .ant-upload-picture-circle-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profilePic {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: rgb(250 232 255);
+    }
+  }
+
+  .infoGroup{
+    display: flex;
+    flex-direction: column;
+    p{
+      margin: 5px 0;
+    }
+    margin-left: 1rem;
+  }
+  .btnGroup {
+    align-self: flex-end;
+    justify-self: flex-end;
+  }
+  
+
+}
+
+@media screen and (max-width: 768px) {
+  .profileContainer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .avatarContainer {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+  }
+}

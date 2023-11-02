@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Dropdown, Form, Popover, Statistic, message } from 'antd'
+import { Avatar, Card, Dropdown, Form, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
   DislikeOutlined,
-  CheckOutlined,
-  CloseOutlined,
   EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone
@@ -17,15 +15,14 @@ import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
+import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
+import { usePostDetail } from '~/hooks/usePost';
+
+import defaultUser from '~/assets/images/defaultUser.png'
 import styles from './styles.module.scss'
 
-import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
-import ModalEditComment from '~/components/atoms/ModalEditComment';
-import { usePostDetail } from '~/hooks/usePost';
-import defaultUser from '~/assets/images/defaultUser.png'
-
-import Spin from '~/components/atoms/Spin';
-// import ModalPost from '../PostsList/PostModal';
+const Spin = loadable(() => import("~/components/atoms/Spin"));
+const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
 
 interface Props {
   postId: any;

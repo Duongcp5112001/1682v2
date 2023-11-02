@@ -17,17 +17,19 @@ import {
   LikeTwoTone,
   DislikeTwoTone
 } from '@ant-design/icons';
+import { checkForbiddenWord, encryptionUserName } from '~/utils/helper'
 
 
 import Meta from 'antd/es/card/Meta'
-import ModalEditComment from '~/components/atoms/ModalEditComment'
-import ModalPost from '../PostModal'
 import defaultUser from '~/assets/images/defaultUser.png'
 import menuIcon from '~/assets/images/menuIcon.svg'
 
+import loadable from '~/utils/loadable'
 import styles from './styles.module.scss'
-import Svg from '~/components/atoms/Svg'
-import { checkForbiddenWord, encryptionUserName } from '~/utils/helper'
+
+const Svg = loadable(() => import("~/components/atoms/Svg"));
+const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
+const ModalPost = loadable(() => import("~/components/molecules/PostList/PostModal"));
 interface Props {
   dataPosts?: any;
   isLoading?: boolean;
@@ -190,7 +192,7 @@ const PostList = (props: Props) => {
         className={styles.listContainer}
         itemLayout="vertical"
         size="small"
-        style={{ maxHeight: maxHeight || '75vh', overflowY: 'scroll' }}
+        style={{ maxHeight: maxHeight }}
         dataSource={dataSource}
         renderItem={(item: any) => (
           <div key={item._id}>
@@ -247,17 +249,41 @@ const PostList = (props: Props) => {
               }
             >
               <Meta
-                avatar={<Avatar size={42} src={item?.updatedBy?.avatar} />}
-                title={
-                  // <a href={item.href}>{item.title}</a>
+                avatar={ item?.inGroup ? 
+                  <Avatar.Group>
+                    <Avatar shape='square' size={42} src={item?.inGroup?.avatar} />
+                    <Avatar size={27} src={item?.updatedBy?.avatar} />
+                  </Avatar.Group>
+                  :
+                  <Avatar size={42} src={item?.updatedBy?.avatar} />
+                }
+                title={ item?.inGroup ? 
+                  <Link
+                    to={`/group/${item.inGroup?._id}`}
+                  >
+                    {item?.inGroup?.name}
+                  </Link>
+                  :
                   <Link
                     to={`/profile/${item.updatedBy?._id}`}
-                    // to={`/post/${item._id}
                   >
-                    {encryptionUserName(item?.updatedBy?.username)}
+                    { 
+                      encryptionUserName(item?.updatedBy?.username)
+                    }
                   </Link>
                 }
                 description={(
+                  item?.inGroup ? 
+                  <div>
+                    <Link
+                      to={`/profile/${item.updatedBy?._id}`}
+                    >
+                      {encryptionUserName(item?.updatedBy?.username)}
+                    </Link>
+                    &nbsp; • &nbsp;
+                    {format(new Date(item.createdAt), DATE)}
+                  </div>
+                  :
                   <Link
                     to={`/posts/${item._id}`}
                   >

@@ -1,16 +1,18 @@
-import { List, Avatar, message, Menu } from "antd";
-import React, { useMemo, useState } from "react";
+import { List, Avatar, Menu } from "antd";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { useFriends } from "~/hooks/useFriends";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
-import defaultAvatar from '~/assets/images/defaultUser.png'
-import Spin from "~/components/atoms/Spin";
-import ChatModal from "~/components/atoms/ChatModal";
+
 import { setMessages, setReceiver } from "~/store/chatMessages";
 // import { getMessages } from "~/api/user";
-import type { MenuProps } from 'antd';
 import { getCookie } from "~/utils/cookie";
 import { encryptionUserName } from "~/utils/helper";
+
+import loadable from "~/utils/loadable";
+
+const Spin = loadable(() => import("~/components/atoms/Spin"));
+const ChatModal = loadable(() => import("~/components/atoms/ChatModal"));
 
 
 // type MenuItem = Required<MenuProps>['items'][number];

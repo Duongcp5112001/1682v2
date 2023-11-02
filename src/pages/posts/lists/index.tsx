@@ -7,9 +7,9 @@ const NewFeed = loadable(() => import('~/components/molecules/PostList'));
 
 const NewFeeds = () => {
   return (
-    <>
+    <div className='overflow-y-scroll max-h-[90vh]'>
       <NewFeed/>
-    </>
+    </div>
   )
 }
 

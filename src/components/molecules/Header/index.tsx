@@ -14,18 +14,18 @@ import { RootState, useAppDispatch, useAppSelector } from "~/store";
 import { setUserInfo } from "~/store/userInfo";
 import { Authorization } from "~/wrapper/Authorization";
 import { UserRole } from "~/utils/constant";
-import styles from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { NotificationSchema, setAllNotifications } from "~/store/notification";
 import { getSelfNotification, markAsRead } from "~/api/notification";
 import { LoadingOutlined } from '@ant-design/icons';
+import styles from "./styles.module.scss";
+
 
 const { Search } = Input;
+const { Header: LayoutHeader } = Layout;
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Svg = loadable(() => import("~/components/atoms/Svg"));
-const { Header: LayoutHeader } = Layout;
-
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 export default function Header() {
   const me = useAppSelector((state: RootState) => state.userInfo.userData);
@@ -138,7 +138,7 @@ export default function Header() {
         </div>
 
         <Search 
-          className="w-[500px] ml-5 border-primary" 
+          className="w-[500px] m-auto border-primary" 
           placeholder="Search on Mystic"
         />
 

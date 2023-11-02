@@ -34,7 +34,7 @@ interface Props {
 const Profile = ({id}: Props) => {
   const token = getCookie("token");
   const { data, isLoading, isFetching, refetch} = useMemberById({memberId: id});
-  const memberData = data?.member;
+  const memberData = data?.data?.memberFound;
   const [adding, setAdding] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const me = useAppSelector((state) => state.userInfo.userData);
@@ -177,7 +177,7 @@ const Profile = ({id}: Props) => {
     <Spin spinning={isLoading || isFetching || loadingUpload}>
       <div className={styles.profileContainer}>
         <div className={styles.images}>
-          <div className='relative h-[220px]'>
+          <div className='relative h-[250px]'>
             <img
               src={memberData?.coverImage}
               alt="cover-image"
@@ -202,7 +202,7 @@ const Profile = ({id}: Props) => {
             }
           </div>
           <div
-            className={`${styles.uploadAvatar} absolute top-[170px] w-100 object-cover`}
+            className={`${styles.uploadAvatar} absolute top-[190px] w-100 object-cover`}
           >
             <div className='w-100 flex justify-center'>
             { memberData?._id === me?._id ?

@@ -1,15 +1,19 @@
-import { Avatar, Button, Card, Space } from 'antd'
 import React, { useState } from 'react'
+import { Avatar, Button, Card } from 'antd'
 import defaultAvatar from '~/assets/images/defaultUser.png'
+import loadable from '~/utils/loadable'
+
 import styles from './styles.module.scss'
-import ModalPost from '../PostList/PostModal'
+
+const ModalPost = loadable(() => import("~/components/molecules/PostList/PostModal"));
 
 interface Props {
   afterSuccess?: () => void;
+  groupId?: any;
 }
 
 const CreatePost = (props: Props) => {
-  const {afterSuccess} = props;
+  const {afterSuccess, groupId} = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
@@ -21,6 +25,7 @@ const CreatePost = (props: Props) => {
         </div>
       </Card>
       <ModalPost
+        groupId={groupId}
         visible={isModalVisible}
         setVisible={setIsModalVisible}
         afterSuccess={afterSuccess}
