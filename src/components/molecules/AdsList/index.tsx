@@ -4,6 +4,7 @@ import { useAdsList } from '~/hooks/useAds'
 import { getCookie } from '~/utils/cookie'
 
 import loadable from '~/utils/loadable'
+import { adsClick } from '~/api/ads'
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
 
@@ -13,11 +14,22 @@ const AdsList = () => {
   const { data, isLoading, isFetching } = useAdsList(token)
   const adsData = data?.data
   // Count ads click => dashboard
+
+  const handleClickAds = async (adsId: any) => {
+    try {
+      const res = await adsClick(adsId)
+      if (res) {
+        console.log(res)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Spin spinning={isLoading || isFetching}>
       <Carousel autoplay>
         { adsData?.map((item: any) => 
-          <div key={item?._id} className='px-2'>
+          <div key={item?._id} className='px-2' onClick={()=> handleClickAds(item?._id)}>
             <a href={item?.url} target='_blank'>
               <img className='object-contain' src={item?.img} alt={item?.title} />
             </a>

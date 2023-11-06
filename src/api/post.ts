@@ -4,7 +4,7 @@ export const getPosts = (params: any) => sendGet('/member/get-posts', params);
 export const getPostDetail = (postId: string) => sendGet(`/posts/${postId}/view-posts`);
 
 export const setPost = (params: any) => sendPost('/member/create-posts', params);
-export const updatePost = (postId: string, params: any) => sendPut(`/post/${postId}/update`, params);
+export const updatePost = (postId: string, params: any) => sendPut(`/posts/${postId}/edit-posts`, params);
 
 export const updateActionPost = (postId: string, action: string) => sendPut(`/posts/${postId}/like-dislike/${action}`);
 export const setCommentPost = (postId: string, params: any) => sendPut(`/posts/${postId}/comment-posts`, params);

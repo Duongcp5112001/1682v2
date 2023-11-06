@@ -67,6 +67,13 @@ const GroupCard = (props: Props) => {
       console.log(error)
     }
   }
+  const handleShowModalConfirm = () => {
+    setVisibleModalConfirm(true)
+  } 
+  const handleCloseModalConfirm = (e: any) => {
+    e.stopPropagation();
+    setVisibleModalConfirm(false)
+  }
 
   return (
     <>
@@ -87,7 +94,14 @@ const GroupCard = (props: Props) => {
             <button onClick={handleJoinGroup} className='mb-2 w-100 rounded-md px-2 py-1 bg-btnPrimary text-white hover:bg-sky-600'>Join Group</button>
             :
             myGroup ?
-            <button onClick={() => setVisibleModalConfirm(true)} className=' z-50 mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>Delete Group</button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation(); // Ngăn chặn sự kiện click lan truyền lên các thành phần cha
+                handleShowModalConfirm();
+              }} 
+              className=' z-50 mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>
+              Delete Group
+            </button>
             :
             <button onClick={handleUnjoinGroup} className='mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>Leave Group</button>
           }
@@ -95,7 +109,7 @@ const GroupCard = (props: Props) => {
       </Card>
       <ModalConfirm
         visible={visibleModalConfirm}
-        onCancel={() => setVisibleModalConfirm(false)}
+        onCancel={(e) => handleCloseModalConfirm(e)}
         onOk={handleDeleteGroup}
         centered={true}
         title={`Are you sure to delete ${group?.name}`}

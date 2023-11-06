@@ -33,15 +33,11 @@ export const handleLogin = ({
   }
 
   if (getCookie('token')) {
-    history.push(ROUTES.Posts)
-    // if (userRole === UserRole.User) {
-    //   history.push(ROUTES.Posts);
-    // }
-    // else if (userRole === UserRole.Author ) {
-    //   history.push(ROUTES.Books);
-    // } else {
-    //   history.push(callbackUrl ?? ROUTES.DashBoard);
-    // }
+    if (userRole === UserRole.Member) {
+      history.push(ROUTES.Posts);
+    } else {
+      history.push(callbackUrl ?? ROUTES.DashBoard);
+    }
     // window.location.reload();
   }
 

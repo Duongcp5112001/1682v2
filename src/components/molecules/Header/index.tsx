@@ -67,18 +67,6 @@ export default function Header() {
         Profile
       </div>,
     },
-    me &&
-      me.role &&
-      me.role === UserRole.Admin && {
-        key: "2",
-        label: <div onClick={handleSetting}>Setting</div>,
-      },
-    me &&
-      me.role &&
-      me.role === UserRole.Author && {
-        key: "3",
-        label: <div onClick={handleShowTransaction}>Payments</div>,
-      },
     {
       type: "divider",
     },

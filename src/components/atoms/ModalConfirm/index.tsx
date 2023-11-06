@@ -9,7 +9,7 @@ import { Button } from 'antd';
 interface Props { 
   visible: boolean;
   centered?: any;
-  onCancel: () => void;
+  onCancel: (e: any) => void;
   onOk: () => void;
   title: string;
   children?: any;

@@ -1,0 +1,18 @@
+.dashboardContainer {
+  .cardColumnChart{
+    background: linear-gradient(to bottom right, #3debf1 20%, #b606ad 80%);
+  }
+  .cardInfoValue{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .statistic{
+    display: flex;
+    align-items: center;
+  }
+  .dualLineChart{
+    height: 100%;
+  }
+}

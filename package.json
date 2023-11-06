@@ -13,6 +13,7 @@
     "tw-build": "npx tailwindcss build src/index.css -o src/tailwind.output.css"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@react-spring/web": "^9.5.4",
     "@reduxjs/toolkit": "1.9.1",
     "@tanstack/react-query": "^4.22.0",

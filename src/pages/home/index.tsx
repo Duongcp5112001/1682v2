@@ -19,14 +19,11 @@ export default function Home() {
      navigate(ROUTES.Login) 
     }
     if (userData){
-      navigate(ROUTES.Posts)
-      // if (userData.role && ((userData.role === UserRole.Admin))) {
-      //   navigate(ROUTES.DashBoard);
-      // } else if (userData.role && ((userData.role === UserRole.Author))) {
-      //   navigate(ROUTES.Books);
-      // } else {
-      //   navigate(ROUTES.Posts);
-      // }
+      if (userData.role && ((userData.role === UserRole.Admin))) {
+        navigate(ROUTES.DashBoard);
+      } else {
+        navigate(ROUTES.Posts);
+      }
     }
   }, [navigate, getCookie, userData]);
 

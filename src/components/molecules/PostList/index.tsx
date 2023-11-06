@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { usePosts } from '~/hooks/usePost';
 
 import { getCookie } from '~/utils/cookie';
@@ -11,6 +11,7 @@ const CreatePost = loadable(() => import('~/components/molecules/CreatePost'));
 const NewFeed = () => {
   const memberId = getCookie('userId')
   const { data, isLoading, isFetching, refetch } = usePosts({memberId})
+  const posts = data?.data?.posts
 
   return (
     <div>
@@ -18,7 +19,7 @@ const NewFeed = () => {
         afterSuccess={refetch}
       />
       <PostList 
-        dataPosts={data?.data?.posts}
+        dataPosts={posts}
         isLoading={isLoading}
         isFetching={isFetching}
         refetch={refetch}

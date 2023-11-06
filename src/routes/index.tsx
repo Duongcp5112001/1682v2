@@ -11,6 +11,13 @@ const Friend = loadable(() => import("~/pages/friends"));
 const Contact = loadable(() => import("~/pages/contactAdmin"));
 const Game = loadable(() => import("~/pages/game"));
 
+// Admin
+const DashBoard = loadable(() => import("~/pages/dashboard"));
+const ManageAccount = loadable(() => import("~/pages/account"));
+const ManageGroup = loadable(() => import("~/pages/manageGroup"));
+const ManageAds = loadable(() => import("~/pages/ads"));
+
+
 
 const Login = loadable(() => import("~/pages/login"));
 const ResetPassword = loadable(() => import("~/pages/resetPassword"));
@@ -27,6 +34,13 @@ export const ROUTES = {
   Game: "/game",
   MemberProfile: (id: number | string) => `/profile/${id}`,
   PostDetails: (id: number | string) => `/posts/${id}`,
+
+  // Admin
+  DashBoard: '/dashboard',
+  ManageAccount: '/manage-account',
+  ManageGroup: '/manage-group',
+  ManageAds: '/manage-ads',
+
   // no auth
   Login: "/login",
   ResetPassword: "/resetPassword",
@@ -93,6 +107,36 @@ const routes = [
     exact: true,
     path: ROUTES.Contact,
     component: Contact,
+    layout: Auth,
+    isAuth: true,
+  },
+
+  // Admin 
+  {
+    exact: true,
+    path: ROUTES.DashBoard,
+    component: DashBoard,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.ManageAccount,
+    component: ManageAccount,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.ManageGroup,
+    component: ManageGroup,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.ManageAds,
+    component: ManageAds,
     layout: Auth,
     isAuth: true,
   },

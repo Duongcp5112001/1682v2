@@ -26,6 +26,7 @@ import menuIcon from '~/assets/images/menuIcon.svg'
 
 import loadable from '~/utils/loadable'
 import styles from './styles.module.scss'
+import ImageList from '../ImageList'
 
 const Svg = loadable(() => import("~/components/atoms/Svg"));
 const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
@@ -293,11 +294,12 @@ const PostList = (props: Props) => {
               />
               <div className={styles.postContent}>
                 {item.description}
-                <div
+                {/* <div
                   className={styles.imageContainer}
                 >
                   <img src={item.image} alt={item?.name} />
-                </div>
+                </div> */}
+                <ImageList imageList={item.image}/>
               </div>
             </Card>
             {showCommentMap[item._id] &&

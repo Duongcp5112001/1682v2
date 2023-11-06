@@ -55,9 +55,13 @@ const ModalPost = (props: Props) => {
       },
       async () => {
         const snapshot = await uploadTask;
-        const url = await getDownloadURL(snapshot.ref)
-        setMetadataList(url);
-        onSuccess(url);
+        const metadata = await getMetadata(storageRef);
+        const result = {
+          name: metadata.name,
+          url: await getDownloadURL(snapshot.ref)
+        };
+        setMetadataList((prevState: any) => [...prevState, result]);
+        onSuccess(result);
       }
     );
   };
@@ -93,7 +97,7 @@ const ModalPost = (props: Props) => {
         } else {
           res = await setPost(fmData)
         }
-        if (res.msg === CREATE_POST_SUCCESS) {
+        if (res.msg === CREATE_POST_SUCCESS || res.msg === SUCCESS) {
           message.success({
             content: postData ? 'Update post success' : 'Add post success'
           })
@@ -150,7 +154,7 @@ const ModalPost = (props: Props) => {
         description: postData.description,
         isAnonymous: isAnonymous
       })
-      setFileList(postData?.image ? [{ url: postData.image }] : [])
+      setFileList(postData?.image)
     }
   }, [postData])
   
@@ -167,14 +171,20 @@ const ModalPost = (props: Props) => {
       className={styles.modalContainer}
     >
     <div className='text-center'>
-      <h3 className='text-xl font-semibold'>Create your post</h3>
+      <h3 className='text-xl font-semibold'>
+        {postData ? 
+          'Edit your post'
+          :
+          'Create your post'
+        }
+      </h3>
     </div>
     <Meta
       className={styles.metaUser}
       avatar={<Avatar size={54} src={userData?.avatar}/>}
       title={
         <div className={styles.titleGroup}>
-          <strong>{userData?.firstName} {userData?.lastName}</strong>
+          <strong>{userData?.username}</strong>
           <Select
             defaultValue={'Public'}
             size='small'
@@ -223,11 +233,10 @@ const ModalPost = (props: Props) => {
               const result = info.fileList?.map((item: any) => (
                 {
                   name: item.name,
-                  contentType: item.contentType,
                   url: item.url
                 }
               ))
-              setMetadataList(result);;
+              setMetadataList(result);
             }
             // Save file list in state
             const fileList = [...info.fileList];
@@ -246,7 +255,11 @@ const ModalPost = (props: Props) => {
           htmlType='submit'
           className='w-100'
         >
-          Post
+          { postData ? 
+            'Update'
+            : 
+            'Post'
+          }
         </TailwindButton>                
       </div>
     </Form>
