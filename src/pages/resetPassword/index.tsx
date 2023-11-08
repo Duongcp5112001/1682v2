@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
+import LoadingButton from '~/components/atoms/LoadingButton'
+import TailwindButton from '~/components/atoms/TailwindButton'
 
 const ResetPassword = () => {
+  const [loading, setLoading] = useState(false)
+
   return (
-    <div>ResetPassword</div>
+    <div>
+      { loading ? 
+        <LoadingButton/>
+        :
+        <TailwindButton className='bg-btnAntd' onClick={() => setLoading(true)}>Test Loading</TailwindButton>
+      }
+    </div>
   )
 }
 

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Carousel } from 'antd'
 import { useAdsList } from '~/hooks/useAds'
 import { getCookie } from '~/utils/cookie'
 
 import loadable from '~/utils/loadable'
 import { adsClick } from '~/api/ads'
+import { AllStatus } from '~/utils/constant'
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
 
@@ -13,6 +14,11 @@ const AdsList = () => {
   const token = getCookie('token')
   const { data, isLoading, isFetching } = useAdsList(token)
   const adsData = data?.data
+
+  const showingAds = useMemo(() => {
+    return adsData?.filter((ads: any) => ads?.status === AllStatus.ACTIVE);
+  }, [adsData])
+
   // Count ads click => dashboard
 
   const handleClickAds = async (adsId: any) => {
@@ -28,7 +34,7 @@ const AdsList = () => {
   return (
     <Spin spinning={isLoading || isFetching}>
       <Carousel autoplay>
-        { adsData?.map((item: any) => 
+        { showingAds?.map((item: any) => 
           <div key={item?._id} className='px-2' onClick={()=> handleClickAds(item?._id)}>
             <a href={item?.url} target='_blank'>
               <img className='object-contain' src={item?.img} alt={item?.title} />

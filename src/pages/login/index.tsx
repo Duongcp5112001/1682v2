@@ -54,7 +54,8 @@ const Login = () => {
         }
       }
     } catch (error: any) {
-      message.error(error)
+      console.log(error)
+      // message.error(error)
     }
   }
 
@@ -92,7 +93,7 @@ const Login = () => {
             >
               <Form.Item 
                 name='userName'
-                label='Email'
+                label='User Name'
                 rules={[
                   { required: true, message: 'Please input user name!' },
                 ]}

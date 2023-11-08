@@ -10,20 +10,14 @@ import Svg from '~/components/atoms/Svg'
 import menuIcon from '~/assets/images/menuIcon.svg'
 import { useGroups } from '~/hooks/useGroup'
 import Spin from '~/components/atoms/Spin'
+import GroupCard from './GroupCard'
 
 const { Search } = Input;
 const ManageGroups = () => {
   const token = getCookie('token')
-  const {data, isFetching, isLoading} = useGroups(token)
+  const {data, isFetching, isLoading, refetch} = useGroups(token)
   const dataGroups = data?.data;
 
-  const handleActiveGroup = async (groupId: any) => {
-    //Todo
-  }
-
-  const handleInactiveGroup = async (groupId: any) => {
-    //Todo
-  }
   return (
     <>
     
@@ -36,48 +30,13 @@ const ManageGroups = () => {
       </div>
       <Spin spinning={isLoading || isFetching}>
         <List
-          className='bg-bgColor p-7 rounded-lg overflow-y-auto max-h-[82vh]'
-          style={{maxWidth: 'unset'}}
+          grid={{ gutter: 16, column: 3 }}
           dataSource={dataGroups}
-          itemLayout="vertical"
           renderItem={(item: any) => (
-            <List.Item 
+            <List.Item
               key={item?._id}
-              extra = {
-                <Dropdown
-                  menu={
-                    {
-                      items: [
-                        (item?.status && item.status === AllStatus.INACTIVE) && {
-                          label: <div onClick={() => handleActiveGroup(item._id)}>Active group</div>,
-                          key: '0',
-                        },
-                        {
-                          type: 'divider',
-                        },
-                        (item?.status && item.status === AllStatus.ACTIVE) && {
-                          label: <div onClick={() => handleInactiveGroup(item._id)}>Inactive group</div>,
-                          key: '2',
-                          danger: true,
-                        },
-                      ]
-                    }
-                  }
-                  trigger={['hover']}
-                >
-                  <div
-                    className='cursor-pointer'
-                  >
-                    <Svg src={menuIcon} className='w-5' />
-                  </div>
-                </Dropdown>
-              }
             >
-              <List.Item.Meta
-                avatar={<Avatar shape='square' size={56} src={item?.avatar} />}
-                title={<div>{item?.name}</div>}
-                description={item?.createdAt && ` ${format(new Date(item.createdAt), DATE)}`}
-              />
+              <GroupCard refetch={refetch} group={item}/>
             </List.Item>
           )}
         />

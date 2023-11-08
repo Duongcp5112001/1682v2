@@ -11,7 +11,7 @@ const CreatePost = loadable(() => import('~/components/molecules/CreatePost'));
 const NewFeed = () => {
   const memberId = getCookie('userId')
   const { data, isLoading, isFetching, refetch } = usePosts({memberId})
-  const posts = data?.data?.posts
+  const posts = data?.data
 
   return (
     <div>

@@ -62,16 +62,16 @@ const Profile = ({id}: Props) => {
       label: `Post`,
       children: <Post memberId={id}/>,
     },
-    // {
-    //   key: '2',
-    //   label: `Infomation`,
-    //   children: <Infomations data={memberData}/>,
-    // },
-    // {
-    //   key: '3',
-    //   label: `Friend`,
-    //   children: <Friends data={memberData}/>,
-    // }
+    {
+      key: '2',
+      label: `Infomation`,
+      children: <Infomations data={memberData}/>,
+    },
+    {
+      key: '3',
+      label: `Friend`,
+      children: <Friends data={memberData}/>,
+    }
   ];
 
   const dispatch = useAppDispatch();

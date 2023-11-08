@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 import { Divider, List } from 'antd';
 
 import loadable from '~/utils/loadable';
-import plusIcon from '~/assets/images/plusIcon.svg'
+import plusIconWhite from '~/assets/images/plusIconWhite.svg'
 import Svg from '~/components/atoms/Svg';
 
 import ModalCreateGroup from '~/components/atoms/ModalCreateGroup';
@@ -46,7 +46,7 @@ const GroupList = () => {
       <Spin spinning={isLoading || isFetching}>
         <div className='flex justify-end'>
           <TailwindButton onClick={() => setVisibleModalCreateGroup(true)} className='flex items-center bg-btnAntd hover:bg-btnHover text-white'>
-            <Svg className='w-3 text-white mr-2' src={plusIcon}/>
+            <Svg className='w-3 text-white mr-2' src={plusIconWhite}/>
             Create group
           </TailwindButton>
         </div>
@@ -94,7 +94,7 @@ const GroupList = () => {
         <List
           grid={{ gutter: 16, column: 3 }}
           dataSource={joinedGroups}
-          header={<div className='text-xl font-semibold'>Your group has joined</div>}
+          header={<div className='text-xl font-semibold'>Joined group</div>}
           renderItem={(item: any) => (
             <List.Item
               onClick={() => handleNavigate(item?._id)}

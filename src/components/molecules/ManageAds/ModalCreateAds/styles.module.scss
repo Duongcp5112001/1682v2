@@ -1,0 +1,33 @@
+.modalContainer{
+  :global {
+    .ant-picker,
+    .ant-input-number,
+    .ant-input-number-affix-wrapper {
+      width: 100%;
+    }
+    
+  }
+  .titleGroup{
+    display: flex;
+    margin-left: 0.5rem;
+    flex-direction: column;
+  }
+  .metaUser{
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+  .formContainer {
+    .uploadBtn{
+      margin-bottom: 1rem;
+    }
+    .checkbox{
+      margin-bottom: 1rem;
+    }
+    .btnGroup{
+      display: flex;
+      .btnPost{
+        width: 100%;
+      }
+    }
+  }
+}

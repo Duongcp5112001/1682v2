@@ -29,7 +29,7 @@ function Wrapper() {
 
   const { data: dataMember, refetch } = useMember(token);
   useEffect(() => {
-    refetch();
+    // refetch();
     dispatch(setStateRefetchUser(false))
   }, [refetchApi])
   

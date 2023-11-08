@@ -19,7 +19,10 @@ const GroupCard = (props: Props) => {
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [visibleModalConfirm, setVisibleModalConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const handleJoinGroup = async () => {
+    setLoading(true)
     try {
       const res = await joinGroup(group?._id, userData?._id)
       if (res) {
@@ -33,6 +36,7 @@ const GroupCard = (props: Props) => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false)
   }
 
   const handleUnjoinGroup = async () => {
@@ -81,7 +85,7 @@ const GroupCard = (props: Props) => {
         hoverable
         className={styles.cardContainer}
         style={{ width: 340 }}
-        cover={<img alt={group?.name} src={group?.coverImage} />}
+        cover={<img className='min-h-[137px]' alt={group?.name} src={group?.coverImage} />}
       >
         <div className='text-base font-medium mb-1'>
           {group?.name}
@@ -96,14 +100,22 @@ const GroupCard = (props: Props) => {
             myGroup ?
             <button 
               onClick={(e) => {
-                e.stopPropagation(); // Ngăn chặn sự kiện click lan truyền lên các thành phần cha
+                e.stopPropagation();
                 handleShowModalConfirm();
               }} 
               className=' z-50 mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>
               Delete Group
             </button>
             :
-            <button onClick={handleUnjoinGroup} className='mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>Leave Group</button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleUnjoinGroup();
+              }} 
+              className='mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'
+            >
+              Leave Group
+            </button>
           }
         </div>
       </Card>

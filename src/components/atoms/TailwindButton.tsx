@@ -15,7 +15,7 @@ const TailwindButton = (props: ButtonProps) => {
   if (type === 'primary') {
     buttonStyles += ' text-white bg-btnAntd hover:bg-btnHover';
   } else if (type === 'secondary') {
-    // Thêm các styles khác cho loại button khác nếu cần
+    buttonStyles += 'bg-btnSecondary text-white hover:bg-gray-500'
   }
 
   return (
