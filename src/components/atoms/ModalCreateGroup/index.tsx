@@ -84,7 +84,7 @@ const ModalCreateGroup = (props: Props) => {
             <TailwindButton
               htmlType='submit'
               type='primary'
-              className='w-[65px] ml-2'
+              customClass='ml-2'
             >
               Create
             </TailwindButton>                

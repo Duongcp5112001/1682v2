@@ -45,7 +45,11 @@ const GroupList = () => {
     <>
       <Spin spinning={isLoading || isFetching}>
         <div className='flex justify-end'>
-          <TailwindButton onClick={() => setVisibleModalCreateGroup(true)} className='flex items-center bg-btnAntd hover:bg-btnHover text-white'>
+          <TailwindButton 
+            onClick={() => setVisibleModalCreateGroup(true)} 
+            type='primary' 
+            customClass='flex items-center'
+          >
             <Svg className='w-3 text-white mr-2' src={plusIconWhite}/>
             Create group
           </TailwindButton>

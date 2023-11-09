@@ -1,28 +1,46 @@
+import { Button, ButtonProps } from 'antd';
 import React from 'react';
 
-interface ButtonProps {
-  htmlType?: any;
-  type?: 'primary' | 'secondary';
-  onClick?: () => void;
-  className?: string;
-  children?: React.ReactNode | React.ReactNode[]; 
+interface Props extends ButtonProps {
+  children?: React.ReactNode | React.ReactNode[];
+  type?:  "link" | "text" | "default" | "primary" | "dashed" | undefined;
+  customClass?: string;
 }
+const TailwindButton = (props: Props) => {
 
-const TailwindButton = (props: ButtonProps) => {
-  const { htmlType, type, onClick, children, className } = props;
-  let buttonStyles = `px-2 py-1 rounded-md ${className || ''}`;
-  
-  if (type === 'primary') {
-    buttonStyles += ' text-white bg-btnAntd hover:bg-btnHover';
-  } else if (type === 'secondary') {
-    buttonStyles += 'bg-btnSecondary text-white hover:bg-gray-500'
+  let defaultClassName = 'bg-btnAntd';
+  let buttonClassName = `${defaultClassName} ${props.customClass|| ''}`;
+
+  switch (props.type) {
+    case 'primary':
+      return (
+        <Button
+          className={buttonClassName}
+          {...props}
+        >
+          {props?.children}
+        </Button>
+      )
+    case 'default':
+      return (
+        <Button
+          className={`bg-btnSecondary text-white hover:bg-gray-500 ${props.customClass}`}
+          {...props}
+        >
+          {props?.children}
+        </Button>
+      )
+    default:
+      return (
+        <Button
+          className={props.customClass}
+          {...props}
+        >
+          {props?.children}
+        </Button>
+      )
+      
   }
-
-  return (
-    <button className={buttonStyles} onClick={onClick} type={htmlType}>
-      {children}
-    </button>
-  );
 };
 
 export default TailwindButton;

@@ -14,6 +14,7 @@ import ModalRegister from '~/components/molecules/ModalRegister';
 import { useAppDispatch } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
 import Spin from '~/components/atoms/Spin';
+import TailwindButton from '~/components/atoms/TailwindButton';
 
 
 const Login = () => {
@@ -108,12 +109,13 @@ const Login = () => {
                 <Input.Password className={styles.formInput}/>
               </Form.Item>
               <Form.Item>
-              <button 
-                className='bg-violet-400 text-white px-2 py-1 rounded-md w-[380px] hover:bg-violet-300 hover:text-black'
-                type="submit"
+              <TailwindButton
+                loading={loading}
+                customClass='bg-violet-400 text-white px-2 py-1 w-[380px] hover:bg-violet-300 hover:text-black'
+                htmlType="submit"
               >
                 Login
-              </button>
+              </TailwindButton>
               </Form.Item>
             </Form>
             <Link to={ROUTES.ResetPassword} style={{ textDecoration: "none", color:"grey" }}>

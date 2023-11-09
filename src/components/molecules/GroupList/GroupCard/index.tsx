@@ -7,6 +7,7 @@ import { useAppSelector } from '~/store';
 import styles from './styles.module.scss';
 import ModalConfirm from '~/components/atoms/ModalConfirm';
 import Spin from '~/components/atoms/Spin';
+import TailwindButton from '~/components/atoms/TailwindButton';
 interface Props {
   group?: any;
   joined?: boolean;
@@ -40,6 +41,7 @@ const GroupCard = (props: Props) => {
   }
 
   const handleUnjoinGroup = async () => {
+    setLoading(true)
     try {
       const res = await unjoinGroup(group?._id, userData?._id)
       if (res) {
@@ -53,9 +55,11 @@ const GroupCard = (props: Props) => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false)
   }
 
   const handleDeleteGroup = async () => {
+    setLoading(true)
     try {
       const res = await deleteGroup(group?._id)
       if (res) {
@@ -70,6 +74,7 @@ const GroupCard = (props: Props) => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false)
   }
   const handleShowModalConfirm = () => {
     setVisibleModalConfirm(true)
@@ -85,7 +90,7 @@ const GroupCard = (props: Props) => {
         hoverable
         className={styles.cardContainer}
         style={{ width: 340 }}
-        cover={<img className='min-h-[137px]' alt={group?.name} src={group?.coverImage} />}
+        cover={<img className='h-[140px] object-cover' alt={group?.name} src={group?.coverImage} />}
       >
         <div className='text-base font-medium mb-1'>
           {group?.name}
@@ -95,27 +100,38 @@ const GroupCard = (props: Props) => {
         </div>
         <div className='flex flex-col justify-center items-center'>
           { !joined && !myGroup ? 
-            <button onClick={handleJoinGroup} className='mb-2 w-100 rounded-md px-2 py-1 bg-btnPrimary text-white hover:bg-sky-600'>Join Group</button>
+            <TailwindButton
+              type='primary'
+              customClass='w-100'
+              onClick={handleJoinGroup}
+              loading={loading}
+            >
+              Join Group
+            </TailwindButton>
             :
             myGroup ?
-            <button 
+            <TailwindButton
+              customClass='w-100'
+              loading={loading}
               onClick={(e) => {
                 e.stopPropagation();
                 handleShowModalConfirm();
               }} 
-              className=' z-50 mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'>
+            >
               Delete Group
-            </button>
+            </TailwindButton>
             :
-            <button 
+            <TailwindButton
+              customClass='w-100'
+              type='default'
+              loading={loading}
               onClick={(e) => {
                 e.stopPropagation();
                 handleUnjoinGroup();
               }} 
-              className='mb-2 w-100 rounded-md px-2 py-1 bg-btnSecondary text-white hover:bg-gray-500'
             >
               Leave Group
-            </button>
+            </TailwindButton>
           }
         </div>
       </Card>

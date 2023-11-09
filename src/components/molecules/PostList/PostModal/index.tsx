@@ -251,9 +251,9 @@ const ModalPost = (props: Props) => {
       </div>
       <div className={styles.btnGroup}>
         <TailwindButton
-          type={'primary'}
+          type='primary'
           htmlType='submit'
-          className='w-100'
+          customClass='w-100'
         >
           { postData ? 
             'Update'

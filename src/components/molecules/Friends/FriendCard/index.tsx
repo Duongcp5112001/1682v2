@@ -37,7 +37,7 @@ const FriendCard = (props: Props) => {
       hoverable
       className={styles.cardContainer}
       style={{ width: 240 }}
-      cover={<img alt={friends?.username} src={friends?.avatar} />}
+      cover={<img className='h-[240px] object-cover' alt={friends?.username} src={friends?.avatar} />}
     >
       <div className='text-base font-medium mb-2'>
         {encryptionUserName(friends?.username)}
