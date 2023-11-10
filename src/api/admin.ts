@@ -1,4 +1,4 @@
-import { sendGet, sendPost, sendPut } from "~/utils/axios";
+import { sendDelete, sendGet, sendPost, sendPut } from "~/utils/axios";
 
 export const getAccountList = () => sendGet(`/admin/get-list-members`);
 
@@ -15,3 +15,4 @@ export const createAds = (params: any) => sendPost(`/ads/create-ads`, params);
 export const updateAds = (adsId: any, params: any) => sendPut(`/ads/${adsId}/update-ads`, params);
 export const activeAd = (adsId: any) => sendPut(`/admin/ads/${adsId}/active-ads`);
 export const inactiveAd = (adsId: any) => sendPut(`/admin/ads/${adsId}/deactive-ads`);
+export const deleteAds = (adsId: any) => sendDelete(`/ads/${adsId}/delete`);

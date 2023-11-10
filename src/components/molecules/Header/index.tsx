@@ -15,7 +15,7 @@ import { setUserInfo } from "~/store/userInfo";
 import { Authorization } from "~/wrapper/Authorization";
 import { UserRole } from "~/utils/constant";
 import { useNavigate } from "react-router-dom";
-import { NotificationSchema, setAllNotifications } from "~/store/notification";
+import { setAllNotifications } from "~/store/notification";
 import { getSelfNotification, markAsRead } from "~/api/notification";
 import { LoadingOutlined } from '@ant-design/icons';
 import styles from "./styles.module.scss";
@@ -50,26 +50,20 @@ export default function Header() {
     history.push(ROUTES.MemberProfile(me?._id));
   };
 
-  const handleSetting = () => {
-    // history.push(ROUTES.Setting);
-  };
-
-  const handleShowTransaction = () => {
-    // history.push(ROUTES.PaymentsAuthor);
-  };
-
   const items: MenuProps["items"] = [
     {
       key: "1",
       label: 
-      <div onClick={showProfile} className="flex">
-        <Svg src={profileIcon} className='w-5 mr-2'/>
-        Profile
-      </div>,
+      <Authorization roles={[UserRole.Member]}>
+        <div onClick={showProfile} className="flex">
+          <Svg src={profileIcon} className='w-5 mr-2'/>
+          Profile
+        </div>
+      </Authorization>
     },
-    {
+    me && me.role !== UserRole.Admin ? {
       type: "divider",
-    },
+    } : null,
     {
       key: "4",
       label: 
@@ -80,37 +74,6 @@ export default function Header() {
     },
   ];
 
-  const handleClickNotification = async (
-    schema: string,
-    schemaId: string,
-    read: boolean,
-    notificationId: string
-  ) => {
-    if (!read) {
-      const res = await markAsRead(notificationId);
-      if (res && !res.errorCode && !res.errors.length) {
-        const { data } = res;
-        dispatch(setAllNotifications(data));
-      } else {
-        message.error("Fail to load notifications");
-      }
-    }
-
-    const url = `/schema/id`;
-
-    navigate(
-      url
-        .replace(
-          "schema",
-          schema === NotificationSchema.BOOK
-            ? "books/lists"
-            : NotificationSchema.USER
-            ? "userProfile"
-            : "post"
-        )
-        .replace("id", schemaId)
-    );
-  };
 
   return (
     <Layout className={styles.header}>
@@ -132,6 +95,7 @@ export default function Header() {
 
         <div className={styles.info}>
           <Dropdown
+            placement="bottomLeft"
             overlayStyle={{
               maxHeight: "40vh",
               overflowX: "hidden",
@@ -143,14 +107,6 @@ export default function Header() {
                 key: item._id,
                 label: (
                   <div
-                    onClick={() =>
-                      handleClickNotification(
-                        item.schema,
-                        item.schemaId,
-                        item.read,
-                        item._id
-                      )
-                    }
                     style={{ color: item.read ? "" : "blue" }}
                   >
                     {item.content}

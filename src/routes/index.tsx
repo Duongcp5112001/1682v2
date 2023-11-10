@@ -16,6 +16,7 @@ const DashBoard = loadable(() => import("~/pages/dashboard"));
 const ManageAccount = loadable(() => import("~/pages/account"));
 const ManageGroup = loadable(() => import("~/pages/manageGroup"));
 const ManageAds = loadable(() => import("~/pages/ads"));
+const ManageFWord = loadable(() => import("~/pages/manageFWord"));
 
 
 
@@ -40,6 +41,7 @@ export const ROUTES = {
   ManageAccount: '/manage-account',
   ManageGroup: '/manage-group',
   ManageAds: '/manage-ads',
+  ManageFWord: '/manage-fword',
 
   // no auth
   Login: "/login",
@@ -137,6 +139,13 @@ const routes = [
     exact: true,
     path: ROUTES.ManageAds,
     component: ManageAds,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.ManageFWord,
+    component: ManageFWord,
     layout: Auth,
     isAuth: true,
   },

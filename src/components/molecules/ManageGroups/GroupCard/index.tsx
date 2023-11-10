@@ -106,7 +106,7 @@ const GroupCard = (props: Props) => {
                 className='cursor-pointer'
               >
                 <TailwindButton
-                  type='secondary'
+                  type='default'
                 >
                   <Svg src={menuIconWhite} className='w-5' />
                 </TailwindButton>

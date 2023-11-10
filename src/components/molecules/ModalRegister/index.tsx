@@ -128,7 +128,6 @@ const ModalRegister = (props: Props) => {
             <TailwindButton
               htmlType='submit'
               type='primary'
-              className='w-[65px]'
             >
               Save
             </TailwindButton>                

@@ -13,7 +13,7 @@ import iconPlusWhite from '~/assets/images/plusIconWhite.svg'
 import { useAdsList } from '~/hooks/useAds'
 import Spin from '~/components/atoms/Spin'
 import TailwindButton from '~/components/atoms/TailwindButton'
-import { activeAd, inactiveAd } from '~/api/admin'
+import { activeAd, deleteAds, inactiveAd } from '~/api/admin'
 import ModalAds from './ModalCreateAds'
 import Status from '~/components/atoms/Status'
 
@@ -67,6 +67,22 @@ const ManageAds = () => {
     setVisibleModalAd(true)
   }
 
+  const handleDeleteAds =async (adsId: any) => {
+    try {
+      const res = await deleteAds(adsId)
+      if (res) {
+        if (res.msg === 'Delete ads success!') {
+          message.success('Deltete ad success')
+          refetch()
+        } else {
+          message.error('Deltete ad fail please try again!')
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <div className='flex justify-between'>
@@ -76,7 +92,7 @@ const ManageAds = () => {
             className="w-[500px] border-primary" 
             placeholder="Enter account name"
           />
-          <TailwindButton type='primary' className='ml-3 flex items-center justify-center py-[6px]' onClick={handleShowModalCreateAd}>
+          <TailwindButton type='primary' customClass='flex items-center ml-3' onClick={handleShowModalCreateAd}>
             <Svg src={iconPlusWhite} className='w-3 mr-2'/>
             Create ad
           </TailwindButton>
@@ -109,12 +125,14 @@ const ManageAds = () => {
                             label: <div onClick={() => handleShowModalEditAd(item)}>Edit ad</div>,
                             key: '1',
                           },
-                          {
-                            type: 'divider',
-                          },
                           (item?.status && item.status === AllStatus.ACTIVE) && {
                             label: <div onClick={() => handleInactiveAds(item._id)}>Inactive ad</div>,
                             key: '2',
+                            danger: true,
+                          },
+                          {
+                            label: <div onClick={() => handleDeleteAds(item._id)}>Delete ad</div>,
+                            key: '3',
                             danger: true,
                           },
                         ]

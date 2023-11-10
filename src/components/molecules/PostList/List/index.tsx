@@ -166,21 +166,21 @@ const PostList = (props: Props) => {
     }
   }
 
-  const handleEditComment = (postId: string, commentId: string) => {
+  const handleEditComment = (postId: string, comment: any) => {
     setItemEditComment({
       postId,
-      commentId
+      comment: comment
     })
     setVisibleModalEditComment(true)
   }
 
   const handleDeleteComment = async (postId: string, commentId: string) => {
     const res = await deletePostComment(postId, commentId);
-    if (res.message === SUCCESS) {
+    if (res.msg === SUCCESS) {
       message.success('Delete comment succes')
       refetch();
     } else {
-      message.error(res.message)
+      message.error(res.msg)
     }
   }
   const handleEditPost = (post: any) => {
@@ -294,11 +294,6 @@ const PostList = (props: Props) => {
               />
               <div className={styles.postContent}>
                 {item.description}
-                {/* <div
-                  className={styles.imageContainer}
-                >
-                  <img src={item.image} alt={item?.name} />
-                </div> */}
                 <ImageList imageList={item.image}/>
               </div>
             </Card>
@@ -328,7 +323,7 @@ const PostList = (props: Props) => {
                             {
                               items: [
                                 {
-                                  label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                  label: <div onClick={() => handleEditComment(item._id, comment)}>Edit comment</div>,
                                   key: '0',
                                 },
                                 {
@@ -383,7 +378,7 @@ const PostList = (props: Props) => {
         visible={visibleModalEditComment}
         setVisivle={setVisibleModalEditComment}
         postId={itemEditComment?.postId}
-        commentId={itemEditComment?.commentId}
+        comment={itemEditComment?.comment}
         refetch={refetch}
       />
       <ModalPost

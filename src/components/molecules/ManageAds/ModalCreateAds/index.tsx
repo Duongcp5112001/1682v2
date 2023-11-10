@@ -5,7 +5,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { useAppSelector } from '~/store'
 
 import { SUCCESS } from '~/utils/constant'
-import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { RcFile, UploadFile } from 'antd/es/upload';
 import { createAds, updateAds } from '~/api/admin';
 
@@ -67,7 +67,7 @@ const ModalAds = (props: Props) => {
         ...rest,
         img: metadataList,
       }
-      if (adData) {
+      if (adData && adData?._id) {
         res = await updateAds(adData._id, fmData)
       } else {
         res = await createAds(fmData)
@@ -92,10 +92,18 @@ const ModalAds = (props: Props) => {
   const handleClose = () => {
     setVisible(false);
     setEditAds({});
-    if (!adData) {
+    if (!adData?._id) {
       form.resetFields()
     }
   }
+
+  const handleResetField = () => {
+    if (!adData?.id && !visible) {
+      form.resetFields()
+      setFileList([])
+    }
+  }
+  
   const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -115,8 +123,9 @@ const ModalAds = (props: Props) => {
   };
 
   const handleCancel = () => setPreviewOpen(false);
+
   useEffect(() => {
-    if (adData) {
+    if (adData && adData?._id) {
       form.setFieldsValue({
         title: adData.title,
         company: adData.company,
@@ -135,6 +144,7 @@ const ModalAds = (props: Props) => {
       forceRender
       closable={false}
       onCancel={handleClose}
+      afterClose={handleResetField}
       maskClosable
       className={styles.modalContainer}
     >
@@ -184,20 +194,11 @@ const ModalAds = (props: Props) => {
           fileList={fileList}
           onChange={(info) => {
             const { status } = info.file;
-            // if (status !== "uploading") {
-            //   console.log(info.fileList);
-            // }
             if (status === "done") {
               message.success(`${info.file.name} file uploaded successfully.`);
             } else if (status === "error") {
               message.error(`${info.file.name} file upload failed.`);
             } else if (status === "removed") {
-              // const result = info.fileList?.map((item: any) => (
-              //   {
-              //     name: item.name,
-              //     url: item.url
-              //   }
-              //   ))
                 setMetadataList('');
             }
             // Save file list in state
@@ -213,11 +214,11 @@ const ModalAds = (props: Props) => {
       </div>
       <div className={styles.btnGroup}>
         <TailwindButton
-          type={'primary'}
+          type='primary'
           htmlType='submit'
-          className='w-100'
+          customClass='w-100'
         >
-          { adData ? 
+          { adData?._id ? 
             'Update'
             : 
             'Create'

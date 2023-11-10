@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Form, message } from 'antd';
 // import { updateComment } from '~/api/ideas';
 import { TextArea } from '~/components/atoms/Input';
@@ -7,7 +7,7 @@ import { SUCCESS } from '~/utils/constant';
 import { editPostComment } from '~/api/post';
 
 interface Props {
-  commentId: string;
+  comment: any;
   postId?: string;
   visible: boolean,
   setVisivle: (value: boolean) => void;
@@ -15,12 +15,17 @@ interface Props {
 }
 
 const ModalEditComment = (props: Props) => {
-  const {visible, setVisivle, refetch, commentId, postId} = props;
+  const {visible, setVisivle, refetch, comment, postId} = props;
   const [form] = Form.useForm();
   const rules = [{ required: true, message: '' }];
-
+  useEffect(() => {
+    if (comment && postId) {
+      form.setFieldValue('content', comment.content)
+    }
+  }, [comment, postId])
+  
   const handleEnter = () => {
-    if (form && commentId) {
+    if (form && comment) {
       form.submit()
     }
   }
@@ -28,7 +33,7 @@ const ModalEditComment = (props: Props) => {
   const handleEditComment = async (formValues: any) => {
     let res: any = null;
     if (postId) {
-      res = await editPostComment(postId, commentId, formValues)
+      res = await editPostComment(postId, comment?._id, formValues)
     }
     if (res.msg === SUCCESS) {
       message.success('Update comment success')

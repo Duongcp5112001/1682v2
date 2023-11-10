@@ -21,8 +21,8 @@ import gameIcon from '~/assets/images/gameIcon.svg';
 
 // Admin icon nav bar
 import dashBoardIcon from '~/assets/images/dashBoardIcon.svg';
-import accountIcon from '~/assets/images/accountIcon.svg';
 import adsIcon from '~/assets/images/adsIcon.svg';
+import fWordIcon from '~/assets/images/fWordIcon.svg';
 
 
 import styles from "./styles.module.scss";
@@ -83,16 +83,18 @@ function Auth(props: Props) {
     } else {
       return [ 
         {
-          key: ROUTES.MemberProfile(userData?._id),
+          key: '',
           label: 
           (
             userData ? 
-            <Link style={{display: "flex"}} to={''}>
+            <div className="flex">
               <Avatar src={userData?.avatar}/>
               <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
-            </Link> : <Spin indicator={antIcon} />
+            </div> 
+            : 
+            <Spin indicator={antIcon} />
           ),
-          url: ROUTES.MemberProfile(userData?._id),
+          url: '',
           content: "My Profile",
         },
         {
@@ -122,6 +124,13 @@ function Auth(props: Props) {
           icon: <Svg src={adsIcon} className="w-5"/>,
           url: ROUTES.ManageAds,
           content: "Manage Ads",
+        },
+        {
+          key: ROUTES.ManageFWord,
+          label: <Link to={ROUTES.ManageFWord}>Forbidden Word</Link>,
+          icon: <Svg src={fWordIcon} className="w-5"/>,
+          url: ROUTES.ManageFWord,
+          content: "Forbidden Word",
         },
       ];
     }

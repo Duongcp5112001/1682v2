@@ -59,11 +59,11 @@ export const encryptionUserName = (userName: string) => {
     let count = 0;
     
     for (let i = 0; i < userName?.length; i++) {
-        if (i === 1 || i === 3 || i === 6 || i === 8) {
-            encryptedString += "*";
-            count++;
+        if (i > 0 && i < userName?.length - 1) {
+          encryptedString += "*";
+          count++;
         } else {
-            encryptedString += userName[i];
+          encryptedString += userName[i];
         }
     }
     

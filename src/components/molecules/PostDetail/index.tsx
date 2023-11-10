@@ -167,11 +167,11 @@ const PostDetail = (props: Props) => {
 
   const handleDeleteComment = async (postId: string, commentId: string) => {
     const res = await deletePostComment(postId, commentId);
-    if (res.message === SUCCESS) {
+    if (res.msg === SUCCESS) {
       message.success('Delete comment succes')
       refetch();
     } else {
-      message.error(res.message)
+      message.error(res.msg)
     }
   }
   const handleEditPost = (post: any) => {

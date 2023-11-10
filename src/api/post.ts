@@ -9,4 +9,4 @@ export const updatePost = (postId: string, params: any) => sendPut(`/posts/${pos
 export const updateActionPost = (postId: string, action: string) => sendPut(`/posts/${postId}/like-dislike/${action}`);
 export const setCommentPost = (postId: string, params: any) => sendPut(`/posts/${postId}/comment-posts`, params);
 export const editPostComment = (postId: string, commentId: string, params: any) => sendPut(`/posts/${postId}/comment/${commentId}/edit`, params)
-export const deletePostComment = (postId: string, commentId: string) => sendDelete(`/post/${postId}/delete-comment/${commentId}`);
+export const deletePostComment = (postId: string, commentId: string) => sendDelete(`/posts/${postId}/comment/${commentId}/delete`);
