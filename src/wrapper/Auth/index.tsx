@@ -22,7 +22,7 @@ import gameIcon from '~/assets/images/gameIcon.svg';
 // Admin icon nav bar
 import dashBoardIcon from '~/assets/images/dashBoardIcon.svg';
 import adsIcon from '~/assets/images/adsIcon.svg';
-import fWordIcon from '~/assets/images/fWordIcon.svg';
+import fWordIcon from '~/assets/images/fwordIcon.svg';
 
 
 import styles from "./styles.module.scss";

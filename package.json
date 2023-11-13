@@ -3,9 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "engines": {
-    "node": "16.x"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -21,10 +18,10 @@
     "@types/react-redux": "7.1.24",
     "@types/seamless-immutable": "7.1.16",
     "antd": "^5.10.2",
-    "axios": "0.21.4",
+    "axios": "^1.6.1",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
-    "crypto-js": "4.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "2.29.3",
     "events": "^3.3.0",
     "firebase": "9.17.1",
@@ -36,7 +33,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-pageflip": "^2.0.3",
-    "react-quill": "^2.0.0",
+    "react-quill": "^0.0.2",
     "react-redux": "7.2.9",
     "react-router-dom": "6.4.2",
     "react-scroll": "^1.8.9",
