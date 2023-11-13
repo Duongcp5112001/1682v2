@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { setRegister } from '~/api/register';
 import { REGISTER_SUCCESS } from '~/utils/constant';
 
 import loadable from '~/utils/loadable';
 import styles from './styles.module.scss';
+import { useQuestions } from '~/hooks/securityQuestion';
+import Select, {Option} from '~/components/atoms/Select';
 
 const TailwindButton = loadable(() => import("~/components/atoms/TailwindButton"));
 const Modal = loadable(() => import("~/components/atoms/Modal"));
@@ -16,8 +18,15 @@ interface Props{
 const ModalRegister = (props: Props) => {
   const {visible, setVisible} = props;
   const [form] = Form.useForm();
-
+  const [isSelectQuestion, setIsSelectQuestion] = useState(false) 
   const rules = [{ required: true, message: '' }];
+
+  const {data: questions, isLoading, isFetching} = useQuestions(true)
+
+  const questionOptions = useMemo(() => questions?.data?.map((item: any) => ({
+    label: item.question,
+    value: item._id,
+  })), [questions]);
 
   const handleRegister = async (formValues: any) => {
     try {
@@ -25,12 +34,15 @@ const ModalRegister = (props: Props) => {
         const fmData = {
           username: formValues.userName,
           reenterPassword: formValues.confirmPassword,
-          password: formValues.password
+          password: formValues.password,
+          secretQuestion: formValues.secretQuestion,
+          secretAnswer: formValues.secretAnswer
         }
         const res = await setRegister(fmData)
         if (res) {
           if (res.msg === REGISTER_SUCCESS) {
             message.success('Register account success')
+            form.resetFields()
             setVisible(false)
           }
           else {
@@ -46,6 +58,10 @@ const ModalRegister = (props: Props) => {
   const handleCloseRegisterModal = () => {
     form.resetFields()
     setVisible(false)
+  }
+
+  const handleSelectQuestion = () => {
+    setIsSelectQuestion(true)
   }
 
   return (
@@ -117,6 +133,33 @@ const ModalRegister = (props: Props) => {
               placeholder='Confirm password'
             />
           </Form.Item>
+
+          <Form.Item 
+            className={styles.firstItem}
+            name='secretQuestion'
+            label='Security question'
+            rules={rules}
+          >
+            <Select 
+              loading={isLoading || isFetching}
+              onChange={handleSelectQuestion}
+            >
+              {questionOptions && questionOptions.map((item: any) =>
+                <Option key={item.value} value={item.label}>{item.label}</Option>
+              )}
+            </Select>
+          </Form.Item>
+          { isSelectQuestion ?
+            <Form.Item
+              name='secretAnswer'
+              label='Your answer'
+              rules={rules}
+            >
+              <Input/>
+            </Form.Item>
+            :null
+          }
+
           <div className={styles.btnGroup}>
             <Button
               className={styles.btnClose}

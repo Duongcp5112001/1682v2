@@ -1,8 +1,9 @@
 import React from 'react'
+import ManageFWords from '~/components/molecules/Fword'
 
 const ManageFWord = () => {
   return (
-    <div>ManageFWord</div>
+    <ManageFWords />
   )
 }
 

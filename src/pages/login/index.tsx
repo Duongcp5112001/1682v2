@@ -3,12 +3,9 @@ import { Button, Divider, Form, Input, message } from 'antd';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 import { setLogin } from '~/api/login';
-import { setGuestLogin } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
 import { getCookie } from '~/utils/cookie';
 import { LOGIN_SUCCESS } from '~/utils/constant';
-import loadable from '~/utils/loadable';
-import Svg from '~/components/atoms/Svg';
 import styles from './styles.module.scss';
 import ModalRegister from '~/components/molecules/ModalRegister';
 import { useAppDispatch } from '~/store';
@@ -118,7 +115,7 @@ const Login = () => {
               </TailwindButton>
               </Form.Item>
             </Form>
-            <Link to={ROUTES.ResetPassword} style={{ textDecoration: "none", color:"grey" }}>
+            <Link to={ROUTES.GetSecurityQuestion} style={{ textDecoration: "none", color:"grey" }}>
                 Don't remember your password?
             </Link>
           </div>

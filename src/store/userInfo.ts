@@ -10,6 +10,7 @@ export const initialStateValue = "";
 export interface UserSliceState {
   userInfo: any;
   userData: any;
+  userSecurityQuestion: any;
   messages: Array<any>;
 }
 
@@ -21,6 +22,7 @@ export const userSlice = createSlice<
   initialState: {
     userData: undefined,
     userInfo: undefined,
+    userSecurityQuestion: {},
     messages: [],
   },
   reducers: {
@@ -44,9 +46,19 @@ export const userSlice = createSlice<
         messages: action.payload,
       };
     },
+    setUserSecurityQuestion: (
+      state: UserSliceState,
+      action: PayloadAction<UserSliceState>
+    ) => {
+      const userSecurityQuestion = action.payload;
+      return {
+        ...state,
+        userSecurityQuestion,
+      };
+    },
   },
 });
 
-export const { setUserInfo, setUserMessages } = userSlice.actions;
+export const { setUserInfo, setUserMessages, setUserSecurityQuestion } = userSlice.actions;
 
 export default userSlice.reducer;

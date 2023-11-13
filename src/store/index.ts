@@ -12,6 +12,7 @@ export const store = configureStore({
     refetchApi: refetchApiReducer,
     chatMessages: chatMessages,
     notification: notification,
+    userSecurityQuestion: userInfoReducer,
   },
 });
 

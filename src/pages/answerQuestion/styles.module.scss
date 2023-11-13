@@ -1,0 +1,70 @@
+.login {
+  height: 100vh;
+  background: linear-gradient(to bottom right, #3debf1 20%, #b606ad 80%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: 50%;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 600px;
+    overflow: hidden;
+
+    .left {
+      flex: 1;
+      background: linear-gradient(rgba(236, 35, 220, 0.5), rgba(9, 83, 126, 0.5)),
+        url("../../assets/images/logo_transparent.png")
+          center;
+      background-size: cover;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      color: white;
+
+      h1 {
+        font-size: 60px;
+        line-height: 90px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 320px;
+
+      }
+      
+      span {
+        font-size: 14px;
+      }
+    }
+
+    .right {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      justify-content: center;
+
+      h1 {
+      color: #555;
+      }
+      p {
+        cursor: pointer;
+        color: grey;
+        font-size: 15px;
+      }
+      hr{
+        border: none;
+        border-bottom: 1px solid lightgray;
+      }
+        
+      .formInput {
+        border: none;
+        border-bottom: 1px solid lightgray;
+        padding: 20px 10px;
+      }
+    }
+  }
+}

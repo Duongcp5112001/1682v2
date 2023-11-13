@@ -21,6 +21,8 @@ const ManageFWord = loadable(() => import("~/pages/manageFWord"));
 
 
 const Login = loadable(() => import("~/pages/login"));
+const GetSecurityQuestion = loadable(() => import("~/pages/getSecurityQuestion"));
+const AnswerQuestion = loadable(() => import("~/pages/answerQuestion"));
 const ResetPassword = loadable(() => import("~/pages/resetPassword"));
 
 
@@ -45,6 +47,8 @@ export const ROUTES = {
 
   // no auth
   Login: "/login",
+  GetSecurityQuestion: "/get-security-question",
+  AnswerQuestion: "/answer-question",
   ResetPassword: "/resetPassword",
 };
 
@@ -152,6 +156,18 @@ const routes = [
 
   // no auth
   { exact: true, path: ROUTES.Login, component: Login, isAuth: false },
+  {
+    exact: true,
+    path: ROUTES.GetSecurityQuestion,
+    component: GetSecurityQuestion,
+    isAuth: false,
+  },
+  {
+    exact: true,
+    path: ROUTES.AnswerQuestion,
+    component: AnswerQuestion,
+    isAuth: false,
+  },
   {
     exact: true,
     path: ROUTES.ResetPassword,
