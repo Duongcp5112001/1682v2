@@ -78,10 +78,6 @@ const ManageFWords = () => {
               key={item?._id}
               extra={
                 <div className='flex '>
-                  <div className='flex mr-5'>
-                    <Svg src={clickIcon} className='w-5'/>
-                    {100}
-                  </div>
                   <Dropdown
                     menu={
                       {
@@ -114,7 +110,6 @@ const ManageFWords = () => {
                 title={
                   <div className='flex'>
                     {item?.company}
-                    <Status status={item?.status}/>
                   </div>
                 }
                 description={item?.createdAt && ` ${format(new Date(item.createdAt), DATE)}`}
