@@ -4,7 +4,7 @@ import Input from '~/components/atoms/Input'
 import { useAppSelector } from '~/store'
 
 import { SUCCESS } from '~/utils/constant'
-import { createAds, updateAds } from '~/api/admin';
+import { addFword, updateFword } from '~/api/admin';
 
 import loadable from '~/utils/loadable'
 import styles from './styles.module.scss'
@@ -17,11 +17,11 @@ interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   afterSuccess?: () => void;
-  setEditAds: React.Dispatch<any>;
+  setEditFword: React.Dispatch<any>;
 }
 
 const ModalFword = (props: Props) => {
-  const {visible, setVisible, afterSuccess, fWords, setEditAds} = props;
+  const {visible, setVisible, afterSuccess, fWords, setEditFword} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const rules = [{ required: true, message: '' }];
   const [form] = Form.useForm();
@@ -30,12 +30,12 @@ const ModalFword = (props: Props) => {
     try {
       let res: any = null;
       const fmData = {
-        formValues,
+        word: formValues.word,
       }
       if (fWords && fWords?._id) {
-        res = await updateAds(fWords._id, fmData)
+        res = await updateFword(fWords._id, fmData)
       } else {
-        res = await createAds(fmData)
+        res = await addFword(fmData)
       }
       if (res.msg === 'Create forbidden word successfully!' || res.msg === SUCCESS) {
         message.success({
@@ -55,12 +55,23 @@ const ModalFword = (props: Props) => {
   }
 
   const handleClose = () => {
-
+    setVisible(false)
+    setEditFword({})
   }
 
   useEffect(() => {
-    
+    if (fWords && fWords._id) {
+      form.setFieldsValue({
+        word: fWords.word
+      })
+    }
   }, [fWords])
+  
+  const handleResetField = () => {
+    if (!fWords?._id && !visible) {
+      form.resetFields()
+    }
+  }
   
   return (
     <Modal
@@ -71,6 +82,7 @@ const ModalFword = (props: Props) => {
       forceRender
       closable={false}
       onCancel={handleClose}
+      afterClose={handleResetField}
       maskClosable
       className={styles.modalContainer}
     >
@@ -91,26 +103,13 @@ const ModalFword = (props: Props) => {
       className={styles.formContainer}
     >
       <Form.Item 
-        label='Title'
-        name='title'
+        label='Forbidden word '
+        name='word'
         rules={rules}
       >
         <Input/>
       </Form.Item>
-      <Form.Item 
-        label='Company'
-        name='company'
-        rules={rules}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item 
-        label='URL'
-        name='url'
-        rules={rules}
-      >
-        <Input/>
-      </Form.Item>
+
       <div className={styles.btnGroup}>
         <TailwindButton
           type='primary'

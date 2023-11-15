@@ -5,12 +5,14 @@ import userInfoReducer from "./userInfo";
 import refetchApiReducer from "./stateRefetchApi";
 import chatMessages from "./chatMessages";
 import notification from "./notification";
+import fwordList from "./fwordList";
 
 export const store = configureStore({
   reducer: {
     userInfo: userInfoReducer,
     refetchApi: refetchApiReducer,
     chatMessages: chatMessages,
+    fwordList: fwordList,
     notification: notification,
     userSecurityQuestion: userInfoReducer,
   },

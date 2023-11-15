@@ -8,6 +8,7 @@ import styles from './styles.module.scss';
 import ModalConfirm from '~/components/atoms/ModalConfirm';
 import Spin from '~/components/atoms/Spin';
 import TailwindButton from '~/components/atoms/TailwindButton';
+import { checkForbiddenWord } from '~/utils/helper';
 interface Props {
   group?: any;
   joined?: boolean;
@@ -17,7 +18,10 @@ interface Props {
 
 const GroupCard = (props: Props) => {
   const { group, refetch, joined, myGroup } = props;
+  
   const userData = useAppSelector((state) => state.userInfo.userData);
+  const fWords = useAppSelector((state) => state.fwordList.fwordList);
+
   const [visibleModalConfirm, setVisibleModalConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -93,7 +97,7 @@ const GroupCard = (props: Props) => {
         cover={<img className='h-[140px] object-cover' alt={group?.name} src={group?.coverImage} />}
       >
         <div className='text-base font-medium mb-1'>
-          {group?.name}
+          {checkForbiddenWord(group?.name, fWords)}
         </div>
         <div className='mb-2'>
           {group?.members?.length} member

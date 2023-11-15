@@ -31,7 +31,7 @@ export const getNotifications = () =>
     error: null,
   });
 
-export const getSelfNotification = () => sendGet("/notification/list");
+export const getSelfNotification = () => sendGet("/notification/get-list-notification");
 export const markAsRead = (notificationId: string) =>
   sendPut(`/notification/${notificationId}/mark-as-read`);
 export const markAllAsRead = () => sendPut("/notification/mark-all-as-read");

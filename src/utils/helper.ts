@@ -2,6 +2,7 @@ import { ROUTES } from "~/routes";
 import { getCookie, removeCookie, setCookie } from "./cookie";
 import history from "./history";
 import { UserRole } from "./constant";
+import { RootState, useAppSelector } from "~/store";
 
 export const getFileName = (path: string) => {
   const index = path.lastIndexOf("/");
@@ -80,6 +81,12 @@ export const checkFriend = (me: any, member: any) => {
 }
 
 
-export const checkForbiddenWord = (content: any) => {
-  return content.replace('test', '****')
+export const checkForbiddenWord = (content: any, forbiddenWords: any) => {
+  let filteredContent = content;
+  forbiddenWords.forEach((item: any) => {
+    const regex = new RegExp(`\\b${item.word}\\b`, "gi");
+    filteredContent = filteredContent.replace(regex, (match: any) => "*".repeat(match.length));
+  });
+  return filteredContent;
 }
+

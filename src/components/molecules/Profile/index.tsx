@@ -38,24 +38,6 @@ const Profile = ({id}: Props) => {
   const [visibleModalConfirm, setVisibleModalConfirm] = useState(false);
   const queryClient = useQueryClient();
 
-  const items: TabsProps['items'] = [
-    {
-      key: '1',
-      label: `Post`,
-      children: <Post memberId={id}/>,
-    },
-    {
-      key: '2',
-      label: `Infomation`,
-      children: <Infomations data={memberData}/>,
-    },
-    {
-      key: '3',
-      label: `Friend`,
-      children: <Friends data={memberData}/>,
-    }
-  ];
-
   const dispatch = useAppDispatch();
 
   const userMessages = useAppSelector(
@@ -218,7 +200,7 @@ const Profile = ({id}: Props) => {
                         onClick={handleUnfriend}
                         icon={<Svg src={shieldIcon} className='w-5'/>}
                       >
-                        Friend
+                        Unfriend
                       </TailwindButton>
                       :
                       <Button
@@ -241,7 +223,9 @@ const Profile = ({id}: Props) => {
         </div>
       </div>
 
-      <Tabs defaultActiveKey="1" items={items} className='mt-[150px]' />
+      <div className='mt-[150px]'>
+        <Post memberId={id}/>
+      </div>
     </Spin>
 
   );

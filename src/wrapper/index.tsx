@@ -13,6 +13,9 @@ import { message } from "antd";
 import { getSelfNotification } from "~/api/notification";
 import { setAllNotifications } from "~/store/notification";
 import { setStateRefetchUser } from "~/store/stateRefetchApi";
+import { useFwordList } from "~/hooks/useFword";
+import { setFwordList } from "~/store/fwordList";
+import { fwordList } from "~/api/admin";
 // import { socket } from "~/socket";
 
 function Wrapper() {
@@ -21,15 +24,64 @@ function Wrapper() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    // const getSelfMessages = async () => {
+    //   try {
+    //     const res = await getAllMessages();
 
+    //     if (res && !res.errorCode && !res.errors.length) {
+    //       const { data } = res;
+    //       dispatch(setUserMessages(data));
+    //     } else {
+    //       message.error("Fail to load messages");
+    //     }
+    //   } catch (error) {
+    //     message.error("Fail to load messages");
+    //   }
+    // };
+
+    const getSelfNotifications = async () => {
+      try {
+        const res = await getSelfNotification();
+
+        if (res) {
+          const { data } = res;
+          dispatch(setAllNotifications(data));
+        } else {
+          message.error("Fail to load notifications");
+        }
+      } catch (error) {
+        message.error("Fail to load notifications");
+      }
+    };
+    
+    const getFwordList = async () => {
+      try {
+        const res = await fwordList();
+        if (res) {
+          const { data } = res;
+          dispatch(setFwordList(data))
+        } else {
+          console.log('Error')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    if (token) {
+      getFwordList();
+      getSelfNotifications();
+    } 
+  }, [token, dispatch]);
 
   const refetchApi = useAppSelector(
     (state: RootState) => state.refetchApi.stateRefetchUser
   );
+  
 
   const { data: dataMember, refetch } = useMember(token);
   useEffect(() => {
-    // refetch();
     dispatch(setStateRefetchUser(false))
   }, [refetchApi])
   

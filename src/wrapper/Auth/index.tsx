@@ -45,96 +45,105 @@ function Auth(props: Props) {
   );
 
   const menuLeft: MenuItem[] = useMemo(() => {
-    if (userData && userData.role && userData.role !== UserRole.Admin) {
-      return [ 
-        {
-          key: ROUTES.MemberProfile(userData?._id),
-          label: (
-            <Link style={{display: "flex"}} to={''}>
-              <Avatar src={userData?.avatar}/>
-              <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
-            </Link>
-          ),
-          url: ROUTES.MemberProfile(userData?._id),
-          content: "My Profile",
-        },
-        {
-          key: ROUTES.Friend,
-          label: <Link to={ROUTES.Friend}>Friend</Link>,
-          icon: <Svg src={friendsIcon} className="w-5"/>,
-          url: ROUTES.Friend,
-          content: "Friend",
-        },
-        {
-          key: ROUTES.Groups,
-          label: <Link to={ROUTES.Groups}>Group</Link>,
-          icon: <Svg src={groupsIcon} className="w-5"/>,
-          url: ROUTES.Groups,
-          content: "Groups",
-        },
-        {
-          key: ROUTES.Game,
-          label: <Link to={ROUTES.Game}>Game</Link>,
-          icon: <Svg src={gameIcon} className="w-5" />,
-          url: ROUTES.Game,
-          content: "Game",
-        }
-      ];
-    } else {
-      return [ 
-        {
-          key: '',
-          label: 
-          (
-            userData ? 
-            <div className="flex">
-              <Avatar src={userData?.avatar}/>
-              <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
-            </div> 
-            : 
-            <Spin indicator={antIcon} />
-          ),
-          url: '',
-          content: "My Profile",
-        },
-        {
-          key: ROUTES.DashBoard,
-          label: <Link to={ROUTES.DashBoard}>Dashboard</Link>,
-          icon: <Svg src={dashBoardIcon} className="w-5"/>,
-          url: ROUTES.DashBoard,
-          content: "Dashboard",
-        },
-        {
-          key: ROUTES.ManageAccount,
-          label: <Link to={ROUTES.ManageAccount}>Account</Link>,
-          icon: <Svg src={friendsIcon} className="w-5"/>,
-          url: ROUTES.ManageAccount,
-          content: "Account",
-        },
-        {
-          key: ROUTES.ManageGroup,
-          label: <Link to={ROUTES.ManageGroup}>Group</Link>,
-          icon: <Svg src={groupsIcon} className="w-5"/>,
-          url: ROUTES.ManageGroup,
-          content: "Group",
-        },
-        {
-          key: ROUTES.ManageAds,
-          label: <Link to={ROUTES.ManageAds}>Manage Ads</Link>,
-          icon: <Svg src={adsIcon} className="w-5"/>,
-          url: ROUTES.ManageAds,
-          content: "Manage Ads",
-        },
-        {
-          key: ROUTES.ManageFWord,
-          label: <Link to={ROUTES.ManageFWord}>Forbidden Word</Link>,
-          icon: <Svg src={fWordIcon} className="w-5"/>,
-          url: ROUTES.ManageFWord,
-          content: "Forbidden Word",
-        },
-      ];
+    switch (userData?.role) {
+      case UserRole.Admin:
+        return [ 
+          {
+            key: '',
+            label: 
+            (
+              userData ? 
+              <div className="flex">
+                <Avatar src={userData?.avatar}/>
+                <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
+              </div> 
+              : 
+              <Spin indicator={antIcon} />
+            ),
+            url: '',
+            content: "My Profile",
+          },
+          {
+            key: ROUTES.DashBoard,
+            label: <Link to={ROUTES.DashBoard}>Dashboard</Link>,
+            icon: <Svg src={dashBoardIcon} className="w-5"/>,
+            url: ROUTES.DashBoard,
+            content: "Dashboard",
+          },
+          {
+            key: ROUTES.ManageAccount,
+            label: <Link to={ROUTES.ManageAccount}>Account</Link>,
+            icon: <Svg src={friendsIcon} className="w-5"/>,
+            url: ROUTES.ManageAccount,
+            content: "Account",
+          },
+          {
+            key: ROUTES.ManageGroup,
+            label: <Link to={ROUTES.ManageGroup}>Group</Link>,
+            icon: <Svg src={groupsIcon} className="w-5"/>,
+            url: ROUTES.ManageGroup,
+            content: "Group",
+          },
+          {
+            key: ROUTES.ManageAds,
+            label: <Link to={ROUTES.ManageAds}>Manage Ads</Link>,
+            icon: <Svg src={adsIcon} className="w-5"/>,
+            url: ROUTES.ManageAds,
+            content: "Manage Ads",
+          },
+          {
+            key: ROUTES.ManageFWord,
+            label: <Link to={ROUTES.ManageFWord}>Forbidden Word</Link>,
+            icon: <Svg src={fWordIcon} className="w-5"/>,
+            url: ROUTES.ManageFWord,
+            content: "Forbidden Word",
+          },
+        ];
+      case UserRole.Member:
+        return [ 
+          {
+            key: ROUTES.MemberProfile(userData?._id),
+            label: (
+              <Link style={{display: "flex"}} to={''}>
+                <Avatar src={userData?.avatar}/>
+                <p style={{margin: 0, marginLeft: 12}}>{userData?.username}</p>
+              </Link>
+            ),
+            url: ROUTES.MemberProfile(userData?._id),
+            content: "My Profile",
+          },
+          {
+            key: ROUTES.Friend,
+            label: <Link to={ROUTES.Friend}>Friend</Link>,
+            icon: <Svg src={friendsIcon} className="w-5"/>,
+            url: ROUTES.Friend,
+            content: "Friend",
+          },
+          {
+            key: ROUTES.Groups,
+            label: <Link to={ROUTES.Groups}>Group</Link>,
+            icon: <Svg src={groupsIcon} className="w-5"/>,
+            url: ROUTES.Groups,
+            content: "Groups",
+          },
+          {
+            key: ROUTES.Game,
+            label: <Link to={ROUTES.Game}>Game</Link>,
+            icon: <Svg src={gameIcon} className="w-5" />,
+            url: ROUTES.Game,
+            content: "Game",
+          }
+        ];
+      default:
+        return [
+          {
+            key: '',
+            label: <Spin indicator={antIcon} />,
+            url: '',
+            content: "",
+          },
+        ]
     }
-    
   },[userData]
   );
 

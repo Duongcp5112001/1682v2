@@ -5,7 +5,9 @@ import PostDetail from '~/components/molecules/PostDetail';
 const PostDetails = () => {
   const { id } = useParams();
   return (
-    <PostDetail postId={id}/>
+    <div className='overflow-y-scroll max-h-[90vh]'>
+      <PostDetail postId={id}/>
+    </div>
   );
 }
 

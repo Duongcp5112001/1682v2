@@ -50,6 +50,22 @@ export default function Header() {
     history.push(ROUTES.MemberProfile(me?._id));
   };
 
+  const handleClickNotification = async (notification: any) => {
+    if (!notification.read) {
+      navigate(ROUTES.PostDetails(notification.post))
+      const res = await markAsRead(notification._id)
+      const { data } = res;
+      if (res && !res.errorCode && !res.errors.length) {
+        dispatch(setAllNotifications(data));
+      } else {
+        message.error("Fail to load notifications");
+      }
+    }
+    navigate(ROUTES.PostDetails(notification.post))
+
+  }
+
+
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -101,19 +117,22 @@ export default function Header() {
               overflowX: "hidden",
               overflowY: "scroll",
             }}
-            menu={{
-              items: allNotifications.map((item) => ({
-                ...item,
-                key: item._id,
-                label: (
-                  <div
-                    style={{ color: item.read ? "" : "blue" }}
-                  >
-                    {item.content}
-                  </div>
-                ),
-              })),
-            }}
+            menu={
+              {
+                items: allNotifications.map((item) => ({
+                  ...item,
+                  key: item._id,
+                  label: (
+                    <div
+                      onClick={() => handleClickNotification(item)}
+                      style={{ color: item.read ? "red" : "blue" }}
+                    >
+                      {item.content}
+                    </div>
+                  ),
+                })),
+              }
+            }
           >
             <Badge
               count={allNotifications.filter((item) => !item.read).length}

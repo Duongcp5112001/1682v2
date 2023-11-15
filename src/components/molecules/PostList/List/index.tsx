@@ -41,7 +41,10 @@ interface Props {
 
 const PostList = (props: Props) => {
   const { dataPosts, isFetching, isLoading, refetch, maxHeight } = props;
+
   const userData = useAppSelector((state) => state.userInfo.userData);
+  const fWords = useAppSelector((state) => state.fwordList.fwordList);
+
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
@@ -250,7 +253,7 @@ const PostList = (props: Props) => {
               }
             >
               <Meta
-                avatar={ item?.inGroup ? 
+                avatar={ item?.inGroup ?
                   <Avatar.Group>
                     <Avatar shape='square' size={42} src={item?.inGroup?.avatar} />
                     <Avatar size={27} src={item?.updatedBy?.avatar} />
@@ -293,7 +296,7 @@ const PostList = (props: Props) => {
                 )}
               />
               <div className={styles.postContent}>
-                {item.description}
+                {checkForbiddenWord(item.description, fWords)}
                 <ImageList imageList={item.image}/>
               </div>
             </Card>

@@ -5,28 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 
 export const initialState = {
-  allNotifications: [
-    {
-      _id: '1',
-      content: 'Notification 1 ádasdasdasdasdasdasdasdasdasd',
-      createdAt: '1231231'
-    },
-    {
-      _id: '2',
-      content: 'Notification 2 ádasdasdasdasdasdasdasdasdasd',
-      createdAt: '1231231'
-    }, 
-    {
-      _id: '3',
-      content: 'Notification 3',
-      createdAt: '1231231'
-    },
-    {
-      _id: '4',
-      content: 'Notification 4',
-      createdAt: '1231231'
-    }
-  ],
+  allNotifications: [],
 };
 
 

@@ -90,6 +90,8 @@ const ModalPost = (props: Props) => {
           }
           form.resetFields();
           setVisible(false)
+        } else if (res.error) {
+          message.error(res.error)
         }
       } else {
         if (postData) {

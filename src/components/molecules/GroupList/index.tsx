@@ -19,11 +19,15 @@ const GroupCard = loadable(() => import("~/components/molecules/GroupList/GroupC
 
 const GroupList = () => {
   const token = getCookie('token')
+
   const userData = useAppSelector((state) => state.userInfo.userData);
+
   const navigate = useNavigate();
   const [visibleModalCreateGroup, setVisibleModalCreateGroup] = useState(false)
   const {data, isLoading, isFetching, refetch} = useGroups(token)
+
   const dataGroups = data?.data
+
   const joinedGroups = useMemo(() => {
     return dataGroups?.filter((group: any) => group?.members?.some((member: any) => member.memberGroup === userData?._id));
   }, [dataGroups, userData?._id])

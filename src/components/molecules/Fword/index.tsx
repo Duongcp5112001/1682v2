@@ -8,43 +8,39 @@ import { getCookie } from '~/utils/cookie'
 
 import Svg from '~/components/atoms/Svg'
 import menuIcon from '~/assets/images/menuIcon.svg'
-import clickIcon from '~/assets/images/clickIcon.svg'
 import iconPlusWhite from '~/assets/images/plusIconWhite.svg'
-import { useAdsList } from '~/hooks/useAds'
 import Spin from '~/components/atoms/Spin'
 import TailwindButton from '~/components/atoms/TailwindButton'
-import { deleteAds } from '~/api/admin'
-import ModalAds from './ModalFword'
-import Status from '~/components/atoms/Status'
 import ModalFword from './ModalFword'
+import { useFwordList } from '~/hooks/useFword'
+import { deleteFword } from '~/api/admin'
 
 const { Search } = Input;
 const ManageFWords = () => {
   const token = getCookie('token')
-  const {data, isFetching, isLoading, refetch} = useAdsList(token)
-  const dataAds = data?.data;
-
+  const {data, isFetching, isLoading, refetch} = useFwordList(token)
+  const dataFwords = data?.data;
   const [visibleModalFword, setVisibleModalFword] = useState(false)
-  const [editAds, setEditAds] = useState<any>({})
+  const [editFword, setEditFword] = useState<any>({})
 
   const handleShowModalFword = () => {
     setVisibleModalFword(true)
   }
 
-  const handleShowModalEditFword = (ads: any) => {
-    setEditAds(ads)
+  const handleShowModalEditFword = (fword: any) => {
+    setEditFword(fword)
     setVisibleModalFword(true)
   }
 
-  const handleDeleteFword =async (adsId: any) => {
+  const handleDeleteFword =async (fwordId: any) => {
     try {
-      const res = await deleteAds(adsId)
+      const res = await deleteFword(fwordId)
       if (res) {
-        if (res.msg === 'Delete ads success!') {
+        if (res.msg === SUCCESS) {
           message.success('Deltete ad success')
           refetch()
         } else {
-          message.error('Deltete ad fail please try again!')
+          message.error('Deltete forbidden word fail please try again!')
         }
       }
     } catch (error) {
@@ -71,7 +67,7 @@ const ManageFWords = () => {
         <List
           className='bg-bgColor p-7 rounded-lg overflow-y-auto max-h-[82vh]'
           style={{maxWidth: 'unset'}}
-          dataSource={dataAds}
+          dataSource={dataFwords}
           itemLayout="vertical"
           renderItem={(item: any) => (
             <List.Item 
@@ -106,10 +102,9 @@ const ManageFWords = () => {
               }
             >
               <List.Item.Meta
-                avatar={<Avatar shape='square' size={56} src={item?.img} />}
                 title={
                   <div className='flex'>
-                    {item?.company}
+                    {item?.word}
                   </div>
                 }
                 description={item?.createdAt && ` ${format(new Date(item.createdAt), DATE)}`}
@@ -124,8 +119,8 @@ const ManageFWords = () => {
         visible={visibleModalFword}
         setVisible={setVisibleModalFword}
         afterSuccess={refetch}
-        fWords={editAds}
-        setEditAds={setEditAds}
+        fWords={editFword}
+        setEditFword={setEditFword}
       />
     </>
   )

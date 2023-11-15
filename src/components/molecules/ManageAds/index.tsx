@@ -111,7 +111,7 @@ const ManageAds = () => {
                 <div className='flex '>
                   <div className='flex mr-5'>
                     <Svg src={clickIcon} className='w-5'/>
-                    {100}
+                    {item?.views?.length}
                   </div>
                   <Dropdown
                     menu={

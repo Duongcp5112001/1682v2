@@ -98,7 +98,7 @@ const ModalAds = (props: Props) => {
   }
 
   const handleResetField = () => {
-    if (!adData?.id && !visible) {
+    if (!adData?._id && !visible) {
       form.resetFields()
       setFileList([])
     }

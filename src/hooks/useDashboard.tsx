@@ -3,9 +3,9 @@ import { getInfoDashboard } from '~/api/dashboad';
 
 export const QK_DASHBOARD = 'dashboard';
 
-export function useDashboard(params: any) {
-  const res = useQuery([QK_DASHBOARD, {params}], () => getInfoDashboard(), {
-    enabled: Boolean(params),
+export function useDashboard(token: any) {
+  const res = useQuery([QK_DASHBOARD], () => getInfoDashboard(), {
+    enabled: Boolean(token),
     keepPreviousData: true,
     refetchOnWindowFocus: false
   });

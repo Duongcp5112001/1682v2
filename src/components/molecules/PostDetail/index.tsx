@@ -20,6 +20,8 @@ import { usePostDetail } from '~/hooks/usePost';
 
 import defaultUser from '~/assets/images/defaultUser.png'
 import styles from './styles.module.scss'
+import { encryptionUserName } from '~/utils/helper';
+import ImageList from '../PostList/ImageList';
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
 const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
@@ -34,6 +36,7 @@ const PostDetail = (props: Props) => {
 
   const {data, isLoading, isFetching, refetch} = usePostDetail(postId)
   const dataPosts = data?.posts;
+
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [isLoadingComment, setIsLoadingComment] = useState(false)
@@ -44,7 +47,7 @@ const PostDetail = (props: Props) => {
 
   const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
   const [postEditing, setPostEditing] = useState({});
-
+  
   useEffect(() => {
     if (dataPosts) {
       setDataSource(dataPosts)
@@ -231,14 +234,9 @@ const PostDetail = (props: Props) => {
               <Meta
                 avatar={<Avatar size={42} src={defaultUser} />}
                 title={
-                  // <a href={item.href}>{item.title}</a>
-                  'User name'
+                  <div>{encryptionUserName(dataSource?.updatedBy?.username)}</div>
                 }
                 description={(
-                  // <>
-                  //   <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
-                  //   <div>{item.description}</div>
-                  // </>
                   <div>
                     { dataSource?.updatedAt && format(new Date(dataSource.updatedAt), DATE)}
                   </div>
@@ -246,11 +244,7 @@ const PostDetail = (props: Props) => {
               />
               <div className={styles.postContent}>
                 {dataSource.description}
-                <div
-                  className={styles.imageContainer}
-                >
-                  <img src={dataSource.image} alt={dataSource?.name} />
-                </div>
+                <ImageList imageList={dataSource.image}/>
               </div>
             </Card>
             {showCommentMap[dataSource._id] &&

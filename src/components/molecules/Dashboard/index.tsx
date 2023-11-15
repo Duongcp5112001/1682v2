@@ -7,6 +7,7 @@ import { useDashboard } from "~/hooks/useDashboard";
 import Meta from "antd/es/card/Meta";
 import Spin from "~/components/atoms/Spin";
 import styles from "./styles.module.scss";
+import { getCookie } from "~/utils/cookie";
 
 const listMonth= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -14,10 +15,58 @@ const listMonth= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
 const Dashboards = () => {
   const today = new Date();
   const currentMonth = today.getMonth();
+  const token = getCookie("token");
 
-  // const { data, isFetching, isLoading } = useDashboard(true);
-  const dataDashBoard: any = [];
+  const { data, isFetching, isLoading } = useDashboard(token);
+  const dataDashBoard = data?.data;
   
+
+  const infoPostCount = useMemo(() => {
+    if(dataDashBoard) {
+      const { todayPostCount, yesterdayPostCount } = dataDashBoard;
+  
+      let percent = 0;
+      let type = "equal";
+  
+      if (todayPostCount > yesterdayPostCount) {
+        type = "greaterThan";
+        percent =
+          yesterdayPostCount === 0 ? 100 : todayPostCount / yesterdayPostCount;
+      } else if (todayPostCount < yesterdayPostCount) {
+        type = "lessThan";
+        percent = todayPostCount === 0 ? 100 : yesterdayPostCount / todayPostCount;
+      }
+  
+      return {
+        type,
+        percent,
+      };
+    } else {
+      return {}
+    }
+  }, [dataDashBoard]);
+
+  const infoAdsClick = useMemo(() => {
+    if(dataDashBoard) {
+      const { todayAdClickCount, yesterdayAdClickCount } = dataDashBoard;
+      let percent = 0;
+      let type = "equal";
+      if (todayAdClickCount > yesterdayAdClickCount) {
+        type = "greaterThan";
+        percent = yesterdayAdClickCount === 0 ? 100 : todayAdClickCount / yesterdayAdClickCount;
+      } else if (todayAdClickCount < yesterdayAdClickCount) {
+        type = "lessThan";
+        percent = todayAdClickCount === 0 ? 100 : yesterdayAdClickCount / todayAdClickCount;
+      }
+      return {
+        type,
+        percent,
+      };
+    } else {
+      return {}
+    }
+  },[dataDashBoard])
+
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
     return []
@@ -33,12 +82,15 @@ const Dashboards = () => {
   // total ideas for all system in each year
   const dataPieChart = useMemo(() => {
     if (dataDashBoard) {
-      return dataDashBoard?.totalBookEachYear?.map((item: any) => ({
-        type: item.year,
-        value: item.bookCount,
+      const pieChartData = Object.entries(dataDashBoard.newlyCreatedAccount).map(([type, value]) => ({
+        type,
+        value,
       }));
+      return pieChartData;
+    } else {
+      return []
     }
-  }, [dataDashBoard?.totalBookEachYear]);
+  }, [dataDashBoard?.newlyCreatedAccount]);
 
   const configPieChart = {
     data: dataPieChart ? dataPieChart : [],
@@ -62,30 +114,69 @@ const Dashboards = () => {
     ],
   };
 
-  const dataLineChart = dataDashBoard?.interactionCount;
   
-  const transformedData = useMemo(() => {
-    return []
-  }, [dataLineChart])
-
-  const configLineChart = {
-    data: transformedData ? transformedData : [],
-    xField: 'name',
-    yField: 'value',
-    seriesField: 'type',
-    xAxis: {
-      label: {
-        autoRotate: true, // Enable automatic rotation of labels
-        overflow: 'hidden', // Hide any overflowing text
-        whiteSpace: 'nowrap', // Prevent line breaks
-        textOverflow: 'ellipsis', // Display ellipsis (...) for overflowed text
-        width: 50, // Set a fixed width for the label (adjust as needed)
+  const dualLineData = useMemo(() => {
+    const data = [
+      {
+        name: 'Group 1',
+        like: 30,
+        dislike: 10,
+        comment: 5
       },
-    },
-    isGroup: true,
-    columnStyle: {
-      radius: [10, 10, 0, 0],
-    },
+      {
+        name: 'Group 2',
+        like: 23,
+        dislike: 4,
+        comment: 9
+      },
+      {
+        name: 'Group 3',
+        like: 25,
+        dislike: 5,
+        comment: 4
+      },
+      {
+        name: 'Group 4',
+        like: 10,
+        dislike: 5,
+        comment: 22
+      },
+      {
+        name: 'Group 5',
+        like: 100,
+        dislike: 7,
+        comment: 10
+      },
+    ];
+    // if (dataDashBoard) {
+    //   return dataDashBoard.groupActivityCount.map((group: any) => ({
+    //     name: group.name,
+    //     like: group.activities?.like,
+    //     dislike: group.activities?.dislike
+    //   }))
+    // }
+    return data
+  }, [dataDashBoard?.groupActivityCount])
+
+  const configDualLineChart = {
+    data: [dualLineData, dualLineData],
+    xField: 'name',
+    yField: ['dislike', 'like'],
+    geometryOptions: [
+      {
+        geometry: 'line',
+        color: '#5B8FF9',
+      },
+      {
+        geometry: 'line',
+        lineStyle: {
+          lineWidth: 3,
+          lineDash: [5, 5],
+        },
+        smooth: true,
+        color: '#5AD8A6',
+      },
+    ],
   };
 
   const dataBarChart = useMemo(() => {
@@ -101,13 +192,9 @@ const Dashboards = () => {
     seriesField: 'type',
   };
 
-  const info = useMemo(() => {
-    return []
-  }, [dataDashBoard]);
-
   return (
     <div className={styles.dashboardContainer}>
-      <Spin spinning={false}>
+      <Spin spinning={isLoading || isFetching}>
         <Row gutter={25}>
           <Col 
             xxl={{ span: 12}}
@@ -126,11 +213,11 @@ const Dashboards = () => {
                 <Statistic
                   className="mt-2 ml-2"
                   value={
-                    'info?.percent'
+                    infoPostCount?.percent
                   }
                   precision={2}
-                  valueStyle={{ color: "#3f8600" , fontSize: 14 }}
-                  prefix={ <ArrowUpOutlined />}
+                  valueStyle={{ color:  infoPostCount?.type === 'lessThan' ? 'red' : "#3f8600" , fontSize: 14 }}
+                  prefix={ infoPostCount?.type === 'lessThan' ? <ArrowDownOutlined/> : <ArrowUpOutlined />}
                   suffix="%"
                 />
               </div>
@@ -145,17 +232,17 @@ const Dashboards = () => {
             xs={{ span: 24}}
           >
             <Card>
-              <h3>Year's posts</h3>
+              <h3>Today's ads click</h3>
               <div className={styles.statistic}>
                 <h1 className={styles.cardInfoValue}>
-                  {dataDashBoard?.thisYearPostCount}
+                  {dataDashBoard?.todayAdClickCount}
                 </h1>
                 <Statistic
                   className="mt-2 ml-2"
-                  value={'infoByYear?.percent'}
+                  value={infoAdsClick?.percent}
                   precision={2}
-                  valueStyle={{ color: "#3f8600" , fontSize: 14 }}
-                  prefix={ <ArrowUpOutlined />}
+                  valueStyle={{ color:  infoAdsClick?.type === 'lessThan' ? 'red' : "#3f8600" , fontSize: 14 }}
+                  prefix={ infoAdsClick?.type === 'lessThan' ? <ArrowDownOutlined/> : <ArrowUpOutlined />}
                   suffix="%"
                 />
               </div>
@@ -208,11 +295,11 @@ const Dashboards = () => {
               className={styles.dualLineChart}
             >
               <Card>
-                <Column {...configLineChart} height={300} />
+                <DualAxes {...configDualLineChart} height={300} />
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Interactions of book"
+                title="Top groups interactions"
               />
             </Card>
           </Col>
@@ -232,7 +319,7 @@ const Dashboards = () => {
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Number of books published per year"
+                title="Number of account created per year"
               />
             </Card>
           </Col>
