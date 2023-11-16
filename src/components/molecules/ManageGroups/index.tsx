@@ -34,7 +34,7 @@ const ManageGroups = () => {
           <Input
             addonAfter={<SearchOutlined />}
             className="w-[500px] border-primary" 
-            placeholder="Search forbidden word"
+            placeholder="Search group"
             onChange={(e: any) =>  setFilterGroup(e.target.value)}
           />
       </div>

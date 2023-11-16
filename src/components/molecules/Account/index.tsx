@@ -66,7 +66,7 @@ const Accounts = () => {
           <Input
             addonAfter={<SearchOutlined />}
             className="w-[500px] border-primary" 
-            placeholder="Search forbidden word"
+            placeholder="Search account"
             onChange={(e: any) =>  setFilterAccount(e.target.value)}
           />
       </div>
