@@ -103,16 +103,19 @@ export default function Header() {
 
           <h3 className='my-0 mx-3 text-primary text-lg font-semibold'>Mystic</h3>
         </div>
-        { me && me?.role && me.role !== UserRole.Admin ?
+        { me && me?.role === UserRole.Member ?
           <Search 
             className="w-[500px] m-auto border-primary" 
             placeholder="Search on Mystic"
           />
           :
           <div className="w-[500px] m-auto text-2xl font-semibold text-primary text-center">
-            Admin System
+            { me && me?.role === UserRole.Admin ? 
+            <div>Admin System</div>
+            :
+            <Spin indicator={antIcon} />
+            }
           </div>
-
         }
 
         <div className={styles.info}>
