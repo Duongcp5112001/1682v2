@@ -3,20 +3,20 @@ import { Column, Bar, Pie, DualAxes } from "@ant-design/plots";
 import { Row, Col, Card, Statistic } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { useDashboard } from "~/hooks/useDashboard";
+import { getCookie } from "~/utils/cookie";
 
 import Meta from "antd/es/card/Meta";
 import Spin from "~/components/atoms/Spin";
+
 import styles from "./styles.module.scss";
-import { getCookie } from "~/utils/cookie";
+
 
 const listMonth= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 
 const Dashboards = () => {
   const today = new Date();
-  const currentMonth = today.getMonth();
   const token = getCookie("token");
-
   const { data, isFetching, isLoading } = useDashboard(token);
   const dataDashBoard = data?.data;
   
@@ -69,14 +69,40 @@ const Dashboards = () => {
 
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
-    return []
-  }, [dataDashBoard?.numberAuthorByMonth]);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months.map((month: any) => ({
+      month,
+      post: Math.floor(Math.random() * 50)
+    }))
+    // if (dataDashBoard) {
+    //   const columnChartData = Object.entries(dataDashBoard.newlyCreatedPost).map(([month, value]) => ({
+    //     month,
+    //     value,
+    //   }));
+    //   return columnChartData
+    // } else return []
+  }, [dataDashBoard]);
   
+  console.log(dataColumnChart)
 
   const config = {
     data: dataColumnChart ? dataColumnChart : [],
     xField: "month",
-    yField: "value",
+    yField: "post",
+    statistic: {
+      style:{
+        fill: '#FFF'
+      }
+    },
+    columnStyle: {
+      fill: '#FFF',
+      radius: [5, 5, 0, 0],
+      shadowColor: 'grey',
+      shadowBlur: 10,
+      shadowOffsetX: 5,
+      shadowOffsetY: 5,
+      cursor: 'pointer'
+    }
   };
 
   // total ideas for all system in each year
@@ -180,16 +206,22 @@ const Dashboards = () => {
   };
 
   const dataBarChart = useMemo(() => {
-    return []
-  }, [dataDashBoard?.numberAuthorByMonth]);
+    if (dataDashBoard) {
+      const barChartData = Object.entries(dataDashBoard.newlyCreatedGroup).map(([month, value]) => ({
+        month,
+        value,
+      }));
+      return barChartData;
+    } else return []
+  }, [dataDashBoard?.newlyCreatedGroup]);
   
 
   const configBarChart = {
-    data: dataBarChart ? dataBarChart?.reverse() : [],
+    data: dataBarChart ? dataBarChart : [],
     isStack: true,
-    xField: 'bookCount',
+    xField: 'value',
     yField: 'month',
-    seriesField: 'type',
+    seriesField: 'month',
   };
 
   return (
@@ -260,15 +292,15 @@ const Dashboards = () => {
           >
             <Card>
               <Card className={styles.cardColumnChart}>
-                <Column {...config} height={300} color="#dfe7f7" />
+                <Column {...config} height={300} color="white" />
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Author contribution"
+                title="Created post per month"
                 description={
                   <Statistic
                     title="than last month"
-                    value={'authorContribution?.percent'}
+                    // value={'authorContribution?.percent'}
                     style={{ display: "flex" }}
                     precision={2}
                     valueStyle={{
@@ -337,7 +369,7 @@ const Dashboards = () => {
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Book topics per month"
+                title="Created group nearest 3 months"
               />
             </Card>
           </Col>

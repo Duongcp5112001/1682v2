@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Avatar, Divider, Dropdown, Input, List, message } from 'antd'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
@@ -14,6 +14,7 @@ import TailwindButton from '~/components/atoms/TailwindButton'
 import ModalFword from './ModalFword'
 import { useFwordList } from '~/hooks/useFword'
 import { deleteFword } from '~/api/admin'
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const ManageFWords = () => {
@@ -21,8 +22,14 @@ const ManageFWords = () => {
   const {data, isFetching, isLoading, refetch} = useFwordList(token)
   const dataFwords = data?.data;
   const [visibleModalFword, setVisibleModalFword] = useState(false)
+  const [filterFword, setFilterFword] = useState('')
   const [editFword, setEditFword] = useState<any>({})
 
+  const filterData = useMemo(() => {
+    if (filterFword && dataFwords) {
+      return dataFwords.filter((item: any) => item.word?.toLowerCase()?.includes(filterFword.toLowerCase()))
+    } else return dataFwords
+  }, [dataFwords, filterFword])
   const handleShowModalFword = () => {
     setVisibleModalFword(true)
   }
@@ -53,9 +60,11 @@ const ManageFWords = () => {
       <div className='flex justify-between'>
         <h3 className='text-2xl'>Manage forbidden word</h3>
         <div className='flex items-center'>
-          <Search
+          <Input
+            addonAfter={<SearchOutlined />}
             className="w-[500px] border-primary" 
-            placeholder="Enter account name"
+            placeholder="Search forbidden word"
+            onChange={(e: any) =>  setFilterFword(e.target.value)}
           />
           <TailwindButton type='primary' customClass='flex items-center ml-3' onClick={handleShowModalFword}>
             <Svg src={iconPlusWhite} className='w-3 mr-2'/>
@@ -67,7 +76,7 @@ const ManageFWords = () => {
         <List
           className='bg-bgColor p-7 rounded-lg overflow-y-auto max-h-[82vh]'
           style={{maxWidth: 'unset'}}
-          dataSource={dataFwords}
+          dataSource={filterData}
           itemLayout="vertical"
           renderItem={(item: any) => (
             <List.Item 

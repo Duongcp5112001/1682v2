@@ -18,13 +18,14 @@ const ManageGroup = loadable(() => import("~/pages/manageGroup"));
 const ManageAds = loadable(() => import("~/pages/ads"));
 const ManageFWord = loadable(() => import("~/pages/manageFWord"));
 
-
-
+//No Auth
 const Login = loadable(() => import("~/pages/login"));
 const GetSecurityQuestion = loadable(() => import("~/pages/getSecurityQuestion"));
 const AnswerQuestion = loadable(() => import("~/pages/answerQuestion"));
 const ResetPassword = loadable(() => import("~/pages/resetPassword"));
 
+// Unauthorize 
+const Unauthorize = loadable(() => import("~/pages/404"));
 
 export const ROUTES = {
   Home: "/",
@@ -50,6 +51,9 @@ export const ROUTES = {
   GetSecurityQuestion: "/get-security-question",
   AnswerQuestion: "/answer-question",
   ResetPassword: "/resetPassword",
+
+  //Unauthorize
+  Unauthorize: "/404"
 };
 
 const routes = [
@@ -172,6 +176,14 @@ const routes = [
     exact: true,
     path: ROUTES.ResetPassword,
     component: ResetPassword,
+    isAuth: false,
+  },
+
+  // Unauthorize
+  {
+    exact: true,
+    path: ROUTES.Unauthorize,
+    component: Unauthorize,
     isAuth: false,
   },
 ];

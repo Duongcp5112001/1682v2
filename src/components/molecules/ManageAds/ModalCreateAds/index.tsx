@@ -132,6 +132,7 @@ const ModalAds = (props: Props) => {
         url: adData.url,
       })
       setFileList(adData?.img ? [{url: adData?.img}] : [])
+      setMetadataList(adData?.img)
     }
   }, [adData])
   

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { Avatar, Divider, Dropdown, Input, List, message } from 'antd'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
@@ -12,12 +12,20 @@ import menuIcon from '~/assets/images/menuIcon.svg'
 import Spin from '~/components/atoms/Spin'
 import Status from '~/components/atoms/Status'
 import { activeMember, inactiveMember } from '~/api/admin'
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const Accounts = () => {
   const token = getCookie('token')
   const {data, isFetching, isLoading, refetch} = useAccountList(token)
+  const [filterAccount, setFilterAccount] = useState('')
   const dataAccounts = data?.data;
+
+  const filterData = useMemo(() => {
+    if (filterAccount && dataAccounts) {
+      return dataAccounts.filter((item: any) => item.username?.toLowerCase()?.includes(filterAccount.toLowerCase()))
+    } else return dataAccounts
+  }, [dataAccounts, filterAccount])
 
   const handleActiveAccount = async (accountId: any) => {
     try {
@@ -55,17 +63,19 @@ const Accounts = () => {
     
       <div className='flex justify-between'>
         <h3 className='text-2xl'>Manage account</h3>
-        <Search 
-          className="w-[500px] border-primary" 
-          placeholder="Enter account name"
-        />
+          <Input
+            addonAfter={<SearchOutlined />}
+            className="w-[500px] border-primary" 
+            placeholder="Search forbidden word"
+            onChange={(e: any) =>  setFilterAccount(e.target.value)}
+          />
       </div>
       <Spin spinning={isLoading || isFetching}>
         <List
           className='bg-bgColor p-7 rounded-lg overflow-y-auto max-h-[82vh]'
           style={{maxWidth: 'unset'}}
           itemLayout='vertical'
-          dataSource={dataAccounts}
+          dataSource={filterData}
           renderItem={(item: any) => (
             <List.Item 
               key={item?._id}
@@ -100,9 +110,7 @@ const Accounts = () => {
                 avatar={<Avatar size={42} src={item?.avatar} />}
                 title={
                   <div className='flex'>
-                    <Link to={ROUTES.MemberProfile(item?._id)}>
-                      {item?.username}
-                    </Link>
+                    {item?.username}
                     <Status status={item?.status}/>
                   </div>
                 }

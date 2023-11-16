@@ -3,6 +3,7 @@ import { Button, Result } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { ROUTES } from '~/routes';
+import TailwindButton from '~/components/atoms/TailwindButton';
 
 export default function NotFound() {
   return (
@@ -12,7 +13,7 @@ export default function NotFound() {
       subTitle='Page not found'
       extra={(
         <Link to={ROUTES.Home}>
-          <Button type="primary">Back Home</Button>
+          <TailwindButton type="primary">Back Home</TailwindButton>
         </Link>
       )}
     />

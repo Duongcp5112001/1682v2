@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Avatar, Divider, Dropdown, Input, List, message } from 'antd'
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
@@ -16,6 +16,7 @@ import TailwindButton from '~/components/atoms/TailwindButton'
 import { activeAd, deleteAds, inactiveAd } from '~/api/admin'
 import ModalAds from './ModalCreateAds'
 import Status from '~/components/atoms/Status'
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const ManageAds = () => {
@@ -25,6 +26,13 @@ const ManageAds = () => {
 
   const [visibleModalAd, setVisibleModalAd] = useState(false)
   const [editAds, setEditAds] = useState<any>({})
+  const [filterAds, setFilterAds] = useState('')
+
+  const filterData = useMemo(() => {
+    if (filterAds && dataAds) {
+      return dataAds.filter((item: any) => item.title?.toLowerCase()?.includes(filterAds.toLowerCase()) || item.company?.toLowerCase()?.includes(filterAds.toLowerCase()))
+    } else return dataAds
+  }, [dataAds, filterAds])
   
   const handleActiveAds = async (adsId: any) => {
     try {
@@ -88,9 +96,11 @@ const ManageAds = () => {
       <div className='flex justify-between'>
         <h3 className='text-2xl'>Manage groups</h3>
         <div className='flex items-center'>
-          <Search
+          <Input
+            addonAfter={<SearchOutlined />}
             className="w-[500px] border-primary" 
-            placeholder="Enter account name"
+            placeholder="Search forbidden word"
+            onChange={(e: any) =>  setFilterAds(e.target.value)}
           />
           <TailwindButton type='primary' customClass='flex items-center ml-3' onClick={handleShowModalCreateAd}>
             <Svg src={iconPlusWhite} className='w-3 mr-2'/>
@@ -102,7 +112,7 @@ const ManageAds = () => {
         <List
           className='bg-bgColor p-7 rounded-lg overflow-y-auto max-h-[82vh]'
           style={{maxWidth: 'unset'}}
-          dataSource={dataAds}
+          dataSource={filterData}
           itemLayout="vertical"
           renderItem={(item: any) => (
             <List.Item 

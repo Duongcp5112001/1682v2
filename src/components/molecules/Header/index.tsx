@@ -103,48 +103,56 @@ export default function Header() {
 
           <h3 className='my-0 mx-3 text-primary text-lg font-semibold'>Mystic</h3>
         </div>
+        { me && me?.role && me.role !== UserRole.Admin ?
+          <Search 
+            className="w-[500px] m-auto border-primary" 
+            placeholder="Search on Mystic"
+          />
+          :
+          <div className="w-[500px] m-auto text-2xl font-semibold text-primary text-center">
+            Admin System
+          </div>
 
-        <Search 
-          className="w-[500px] m-auto border-primary" 
-          placeholder="Search on Mystic"
-        />
+        }
 
         <div className={styles.info}>
-          <Dropdown
-            placement="bottomLeft"
-            overlayStyle={{
-              maxHeight: "40vh",
-              overflowX: "hidden",
-              overflowY: "scroll",
-            }}
-            menu={
-              {
-                items: allNotifications.map((item) => ({
-                  ...item,
-                  key: item._id,
-                  label: (
-                    <div
-                      onClick={() => handleClickNotification(item)}
-                      style={{ color: item.read ? "red" : "blue" }}
-                    >
-                      {item.content}
-                    </div>
-                  ),
-                })),
+          <Authorization roles={[UserRole.Member]}>
+            <Dropdown
+              placement="bottomLeft"
+              overlayStyle={{
+                maxHeight: "40vh",
+                overflowX: "hidden",
+                overflowY: "scroll",
+              }}
+              menu={
+                {
+                  items: allNotifications.map((item) => ({
+                    ...item,
+                    key: item._id,
+                    label: (
+                      <div
+                        onClick={() => handleClickNotification(item)}
+                        style={{ color: item.read ? "red" : "blue" }}
+                      >
+                        {item.content}
+                      </div>
+                    ),
+                  })),
+                }
               }
-            }
-          >
-            <Badge
-              count={allNotifications.filter((item) => !item.read).length}
-              size="small"
             >
-              <Svg
-                src={iconNotification}
-                alt="icon notification"
-                className={styles.iconNotification}
-              />
-            </Badge>
-          </Dropdown>
+              <Badge
+                count={allNotifications.filter((item) => !item.read).length}
+                size="small"
+              >
+                <Svg
+                  src={iconNotification}
+                  alt="icon notification"
+                  className={styles.iconNotification}
+                />
+              </Badge>
+            </Dropdown>
+          </Authorization>
           { me ? 
             <Dropdown menu={{ items }}>
               <div className={styles.coverInfo}>
