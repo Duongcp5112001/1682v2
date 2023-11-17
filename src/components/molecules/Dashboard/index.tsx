@@ -69,21 +69,16 @@ const Dashboards = () => {
 
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months.map((month: any) => ({
-      month,
-      post: Math.floor(Math.random() * 50)
-    }))
-    // if (dataDashBoard) {
-    //   const columnChartData = Object.entries(dataDashBoard.newlyCreatedPost).map(([month, value]) => ({
-    //     month,
-    //     value,
-    //   }));
-    //   return columnChartData
-    // } else return []
-  }, [dataDashBoard]);
-  
-  console.log(dataColumnChart)
+    const months: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (dataDashBoard) {
+      const columnChartData = Object.entries(dataDashBoard?.newPostByMonth)?.map(([month, post]) => ({
+        month: months[parseInt(month) - 1],
+        post,
+      }));
+      return columnChartData?.slice(1)
+    } else return []
+  }, [dataDashBoard?.newPostByMonth]);
+
 
   const config = {
     data: dataColumnChart ? dataColumnChart : [],
@@ -108,7 +103,7 @@ const Dashboards = () => {
   // total ideas for all system in each year
   const dataPieChart = useMemo(() => {
     if (dataDashBoard) {
-      const pieChartData = Object.entries(dataDashBoard.newlyCreatedAccount).map(([type, value]) => ({
+      const pieChartData = Object.entries(dataDashBoard.newAccountByYear).map(([type, value]) => ({
         type,
         value,
       }));
@@ -116,7 +111,7 @@ const Dashboards = () => {
     } else {
       return []
     }
-  }, [dataDashBoard?.newlyCreatedAccount]);
+  }, [dataDashBoard?.newAccountByYear]);
 
   const configPieChart = {
     data: dataPieChart ? dataPieChart : [],
@@ -129,7 +124,7 @@ const Dashboards = () => {
       offset: "-30%",
       content: ({ percent }: any) => `${(percent * 100)?.toFixed(0)}%`,
       style: {
-        fontSize: 14,
+        fontSize: 12,
         textAlign: "center",
       },
     },
@@ -142,46 +137,14 @@ const Dashboards = () => {
 
   
   const dualLineData = useMemo(() => {
-    const data = [
-      {
-        name: 'Group 1',
-        like: 30,
-        dislike: 10,
-        comment: 5
-      },
-      {
-        name: 'Group 2',
-        like: 23,
-        dislike: 4,
-        comment: 9
-      },
-      {
-        name: 'Group 3',
-        like: 25,
-        dislike: 5,
-        comment: 4
-      },
-      {
-        name: 'Group 4',
-        like: 10,
-        dislike: 5,
-        comment: 22
-      },
-      {
-        name: 'Group 5',
-        like: 100,
-        dislike: 7,
-        comment: 10
-      },
-    ];
-    // if (dataDashBoard) {
-    //   return dataDashBoard.groupActivityCount.map((group: any) => ({
-    //     name: group.name,
-    //     like: group.activities?.like,
-    //     dislike: group.activities?.dislike
-    //   }))
-    // }
-    return data
+    if (dataDashBoard) {
+      return dataDashBoard.groupActivityCount.map((group: any) => ({
+        name: group.name,
+        like: group.activities?.LIKE,
+        dislike: group.activities?.DISLIKE
+      }))
+    }
+    return []
   }, [dataDashBoard?.groupActivityCount])
 
   const configDualLineChart = {
@@ -206,16 +169,16 @@ const Dashboards = () => {
   };
 
   const dataBarChart = useMemo(() => {
+    const months: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     if (dataDashBoard) {
-      const barChartData = Object.entries(dataDashBoard.newlyCreatedGroup).map(([month, value]) => ({
-        month,
+      const barChartData = Object.entries(dataDashBoard.newGroupByMonth)?.map(([month, value]) => ({
+        month: months[parseInt(month) - 1],
         value,
       }));
       return barChartData;
     } else return []
-  }, [dataDashBoard?.newlyCreatedGroup]);
+  }, [dataDashBoard?.newGroupByMonth]);
   
-
   const configBarChart = {
     data: dataBarChart ? dataBarChart : [],
     isStack: true,

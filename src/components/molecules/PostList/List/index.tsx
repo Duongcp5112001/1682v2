@@ -318,7 +318,11 @@ const PostList = (props: Props) => {
                           </strong>
                         </>
                           }
-                        description={<p className={styles.commentContent}>{comment.content}</p>}
+                        description={
+                          <p className={styles.commentContent}>
+                            {checkForbiddenWord(comment.content, fWords)}
+                          </p>
+                        }
                       />
                       {(comment.createdBy === userData?._id) ?
                         <Dropdown

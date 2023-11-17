@@ -20,7 +20,7 @@ import { usePostDetail } from '~/hooks/usePost';
 
 import defaultUser from '~/assets/images/defaultUser.png'
 import styles from './styles.module.scss'
-import { encryptionUserName } from '~/utils/helper';
+import { checkForbiddenWord, encryptionUserName } from '~/utils/helper';
 import ImageList from '../PostList/ImageList';
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
@@ -38,15 +38,15 @@ const PostDetail = (props: Props) => {
   const dataPosts = data?.posts;
 
   const userData = useAppSelector((state) => state.userInfo.userData);
+  const fWords = useAppSelector((state) => state.fwordList.fwordList);
+
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [isLoadingComment, setIsLoadingComment] = useState(false)
+
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
   const [itemEditComment, setItemEditComment] = useState<any>({});
   const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
-
-  const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
-  const [postEditing, setPostEditing] = useState({});
   
   useEffect(() => {
     if (dataPosts) {
@@ -177,10 +177,6 @@ const PostDetail = (props: Props) => {
       message.error(res.msg)
     }
   }
-  const handleEditPost = (post: any) => {
-    setVisibleModalEditPost(true)
-    setPostEditing(post)
-  }
 
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -243,7 +239,7 @@ const PostDetail = (props: Props) => {
                 )}
               />
               <div className={styles.postContent}>
-                {dataSource.description}
+                {checkForbiddenWord(dataSource.description, fWords)}
                 <ImageList imageList={dataSource.image}/>
               </div>
             </Card>
@@ -265,7 +261,11 @@ const PostDetail = (props: Props) => {
                           </strong>
                         </>
                           }
-                        description={<p className={styles.commentContent}>{comment.content}</p>}
+                        description={
+                          <p className={styles.commentContent}>
+                            {checkForbiddenWord(comment.content, fWords)}
+                          </p>
+                        }
                       />
                       {(comment.updatedBy === userData?._id) ?
                         <Dropdown

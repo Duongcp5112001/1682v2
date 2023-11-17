@@ -32,7 +32,7 @@ export const notificationSlice = createSlice<
   reducers: {
     setAllNotifications: (
       state: NotificationSliceState,
-      action: PayloadAction<Array<Notification>>
+      action: PayloadAction<Array<any>>
     ) => {
       return {
         ...state,

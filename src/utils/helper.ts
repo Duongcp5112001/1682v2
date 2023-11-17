@@ -85,7 +85,7 @@ export const checkForbiddenWord = (content: any, forbiddenWords: any) => {
   let filteredContent = content;
   forbiddenWords.forEach((item: any) => {
     const regex = new RegExp(`\\b${item.word}\\b`, "gi");
-    filteredContent = filteredContent.replace(regex, (match: any) => "*".repeat(match.length));
+    filteredContent = filteredContent?.replace(regex, (match: any) => "*".repeat(match.length));
   });
   return filteredContent;
 }

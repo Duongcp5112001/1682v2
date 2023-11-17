@@ -130,12 +130,11 @@ export default function Header() {
               menu={
                 {
                   items: allNotifications.map((item) => ({
-                    ...item,
                     key: item._id,
                     label: (
                       <div
                         onClick={() => handleClickNotification(item)}
-                        style={{ color: item.read ? "red" : "blue" }}
+                        style={{ color: item?.read ? "red" : "blue" }}
                       >
                         {item.content}
                       </div>
