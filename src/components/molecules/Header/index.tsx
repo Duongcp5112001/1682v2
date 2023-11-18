@@ -129,7 +129,7 @@ export default function Header() {
               }}
               menu={
                 {
-                  items: allNotifications.map((item) => ({
+                  items: allNotifications?.map((item) => ({
                     key: item._id,
                     label: (
                       <div
@@ -144,7 +144,7 @@ export default function Header() {
               }
             >
               <Badge
-                count={allNotifications.filter((item) => !item.read).length}
+                count={allNotifications?.filter((item) => !item.read).length}
                 size="small"
               >
                 <Svg
