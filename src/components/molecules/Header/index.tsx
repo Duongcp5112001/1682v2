@@ -1,5 +1,5 @@
-import React from "react";
-import { Badge, Dropdown, Layout, MenuProps, Spin, message, Input } from "antd";
+import React, { useState } from "react";
+import { Badge, Dropdown, Layout, MenuProps, Spin, message, Input, SelectProps } from "antd";
 import { removeCookie } from "~/utils/cookie";
 import { ROUTES } from "~/routes";
 
@@ -19,6 +19,9 @@ import { setAllNotifications } from "~/store/notification";
 import { getSelfNotification, markAsRead } from "~/api/notification";
 import { LoadingOutlined } from '@ant-design/icons';
 import styles from "./styles.module.scss";
+import Select from "~/components/atoms/Select";
+import { search } from "~/api/member";
+import SearchInput from "~/components/atoms/HeaderSearch";
 
 
 const { Search } = Input;
@@ -90,7 +93,6 @@ export default function Header() {
     },
   ];
 
-
   return (
     <Layout className={styles.header}>
       <LayoutHeader className={styles.coverHeader}>
@@ -104,10 +106,9 @@ export default function Header() {
           <h3 className='my-0 mx-3 text-primary text-lg font-semibold'>Mystic</h3>
         </div>
         { me && me?.role === UserRole.Member ?
-          <Search 
-            className="w-[500px] m-auto border-primary" 
-            placeholder="Search on Mystic"
-          />
+          <div className="m-auto w-[500px]">
+            <SearchInput placeholder="Search on mystic" className='w-100 border-primary'/>
+          </div>
           :
           <div className="w-[500px] m-auto text-2xl font-semibold text-primary text-center">
             { me && me?.role === UserRole.Admin ? 

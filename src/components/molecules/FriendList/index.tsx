@@ -1,4 +1,4 @@
-import { List, Avatar, Menu } from "antd";
+import { List, Avatar, Menu, message } from "antd";
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { useFriends } from "~/hooks/useFriends";
@@ -10,6 +10,9 @@ import { getCookie } from "~/utils/cookie";
 import { encryptionUserName } from "~/utils/helper";
 
 import loadable from "~/utils/loadable";
+import { getMessages } from "~/api/member";
+import { dispatch } from "~/reduxs";
+import { SUCCESS } from "~/utils/constant";
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
 const ChatModal = loadable(() => import("~/components/atoms/ChatModal"));
@@ -20,8 +23,7 @@ const FriendList = () => {
   const userData = useAppSelector((state) => state.userInfo.userData);
   const token = getCookie('token')
   const [open, setOpen] = useState<boolean>(false);
-  const [receiverName, setReceiverName] = useState<string>("");
-  const [visibleChatModal, setVisibelChatModal] = useState(false);
+  const [receiverData, setReceiverData] = useState<any>({});
   const { data, isLoading, isFetching } = useFriends(token);
 
   const friends = data?.data?.member?.friends;
@@ -35,47 +37,47 @@ const FriendList = () => {
     (state: RootState) => state.userInfo.messages
   );
 
-  // const handleClick = async (receiver: string) => {
-  //   dispatch(setReceiver(receiver));
-  //   try {
-  //     const res = await getMessages(receiver);
+  const handleClick = async (receiver: string) => {
+    dispatch(setReceiver(receiver));
+    try {
+      const res = await getMessages(receiver);
 
-  //     if (res && res.errorCode === 0 && !res.errors.length) {
-  //       const { messages } = res.data;
+      if (res.msg === SUCCESS) {
+        const { messages } = res.data;
 
-  //       dispatch(setMessages(messages));
-  //       setOpen(true);
-  //     } else {
-  //       dispatch(setMessages([]));
-  //       dispatch(setReceiver(""));
-  //       message.error(res.message);
-  //     }
-  //   } catch (error) {
-  //     message.error(String(error));
-  //   }
-  // };
+        dispatch(setMessages(messages));
+        setOpen(true);
+      } else {
+        dispatch(setMessages([]));
+        dispatch(setReceiver(""));
+        message.error(res.message);
+      }
+    } catch (error) {
+      message.error(String(error));
+    }
+  };
 
-  // const getLastMessage = (receiverId: string): string => {
-  //   const matchedUserMessage = userMessages.filter(
-  //     (message) => message.receiver._id === receiverId
-  //   );
+  const getLastMessage = (receiverId: string): string => {
+    const matchedUserMessage = userMessages.filter(
+      (message) => message.receiver._id === receiverId
+    );
 
-  //   if (!matchedUserMessage.length) {
-  //     return "";
-  //   }
+    if (!matchedUserMessage.length) {
+      return "";
+    }
 
-  //   const { messages } = matchedUserMessage[0];
+    const { messages } = matchedUserMessage[0];
 
-  //   if (!messages.length) {
-  //     return "";
-  //   }
+    if (!messages.length) {
+      return "";
+    }
 
-  //   return messages[messages.length - 1].content;
-  // };
+    return messages[messages.length - 1].content;
+  };
 
-  const handleShowChatModal = () => {
-    setVisibelChatModal(true)
-  }
+  // const handleShowChatModal = () => {
+  //   setVisibelChatModal(true)
+  // }
 
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -86,7 +88,12 @@ const FriendList = () => {
           <List.Item
             key={item?.friendId?._id}
             className={styles.friendItem}
-            onClick={handleShowChatModal}
+            onClick={() => {
+              setReceiverData(
+                () => item.friendId
+              );
+              handleClick(item.friendId?._id);
+            }}
           >
             {/* Show only the avatar when screen size is small */}
             <div className={styles.avatarContainer}>
@@ -100,7 +107,7 @@ const FriendList = () => {
               <List.Item.Meta
                 avatar={<Avatar size={40} src={item?.friendId?.avatar} />}
                 title={encryptionUserName(item?.friendId?.username)}
-                // description={getLastMessage(item?.user?._id)}
+                description={getLastMessage(item?.user?._id)}
               />
             </div>
           </List.Item>
@@ -108,8 +115,11 @@ const FriendList = () => {
       />
 
       <ChatModal
-        visible={visibleChatModal}
-        setVisible={setVisibelChatModal}
+        open={open}
+        onClose={onClose}
+        userId={userData?._id}
+        receiverData={receiverData}
+        setVisible={setOpen}
       />
     </Spin>
   );

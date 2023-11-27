@@ -123,7 +123,6 @@ const Dashboards = () => {
     }
   };
 
-  // total ideas for all system in each year
   const dataPieChart = useMemo(() => {
     if (dataDashBoard) {
       const pieChartData = Object.entries(dataDashBoard.newAccountByYear).map(([type, value]) => ({

@@ -16,6 +16,8 @@ import { setStateRefetchUser } from "~/store/stateRefetchApi";
 import { useFwordList } from "~/hooks/useFword";
 import { setFwordList } from "~/store/fwordList";
 import { fwordList } from "~/api/admin";
+import { getAllMessages } from "~/api/member";
+import { SUCCESS } from "~/utils/constant";
 // import { socket } from "~/socket";
 
 function Wrapper() {
@@ -25,20 +27,20 @@ function Wrapper() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // const getSelfMessages = async () => {
-    //   try {
-    //     const res = await getAllMessages();
+    const getSelfMessages = async () => {
+      try {
+        const res = await getAllMessages();
 
-    //     if (res && !res.errorCode && !res.errors.length) {
-    //       const { data } = res;
-    //       dispatch(setUserMessages(data));
-    //     } else {
-    //       message.error("Fail to load messages");
-    //     }
-    //   } catch (error) {
-    //     message.error("Fail to load messages");
-    //   }
-    // };
+        if (res) {
+          const { data } = res;
+          dispatch(setUserMessages(data));
+        } else {
+          message.error("Fail to load messages");
+        }
+      } catch (error) {
+        message.error("Fail to load messages");
+      }
+    };
 
     const getSelfNotifications = async () => {
       try {
@@ -71,6 +73,7 @@ function Wrapper() {
 
     if (token) {
       getFwordList();
+      getSelfMessages();
       getSelfNotifications();
     } 
   }, [token, dispatch]);
