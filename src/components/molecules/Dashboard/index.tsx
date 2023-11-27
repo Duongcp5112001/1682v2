@@ -67,7 +67,30 @@ const Dashboards = () => {
     }
   },[dataDashBoard])
 
-  // number user contributors by month
+  const memberContribution = useMemo(() => {
+    const currentMonth = today.getMonth() + 1;
+    if(dataDashBoard) {
+      const thisMonthContribution= dataDashBoard.newPostByMonth?.[currentMonth];
+      const lastMonthContribution = dataDashBoard.newPostByMonth?.[currentMonth - 1];
+      let percent = 0;
+      let type = "equal";
+      if (thisMonthContribution > lastMonthContribution) {
+        type = "greaterThan";
+        percent = lastMonthContribution === 0 ? 100 : thisMonthContribution / lastMonthContribution;
+      } else if (thisMonthContribution < lastMonthContribution) {
+        type = "lessThan";
+        percent = thisMonthContribution === 0 ? 100 : lastMonthContribution / thisMonthContribution;
+      }
+      return {
+        type,
+        percent,
+      };
+    } else return {}
+  },[dataDashBoard])
+
+  console.log(memberContribution)
+
+
   const dataColumnChart = useMemo(() => {
     const months: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     if (dataDashBoard) {
@@ -263,7 +286,7 @@ const Dashboards = () => {
                 description={
                   <Statistic
                     title="than last month"
-                    // value={'authorContribution?.percent'}
+                    value={memberContribution?.percent}
                     style={{ display: "flex" }}
                     precision={2}
                     valueStyle={{
