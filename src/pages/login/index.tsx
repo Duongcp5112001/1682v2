@@ -91,7 +91,11 @@ const Login = () => {
             >
               <Form.Item 
                 name='userName'
+<<<<<<< Updated upstream
                 label='User Name'
+=======
+                label='Username'
+>>>>>>> Stashed changes
                 rules={[
                   { required: true, message: 'Please input user name!' },
                 ]}
