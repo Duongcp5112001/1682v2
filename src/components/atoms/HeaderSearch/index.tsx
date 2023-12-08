@@ -1,6 +1,6 @@
 import { Select, SelectProps, Spin } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { search } from '~/api/member';
 
@@ -17,6 +17,21 @@ const SearchInput = (props: Props) => {
   const navigate = useNavigate();
   // const location = useLocation();
   // console.log(location.pathname);
+
+  // useEffect(() => {
+  //   try {
+  //     async () => {
+  //       const res = await search({keyword: ''})
+  //       if (res.data) {
+  //         const allData = [...res.data?.post, ...res.data?.group];
+  //         setData(allData)
+  //         setFetching(false)
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }, [])
 
   const handleSearch = async (searchValue: string) => {
     setFetching(true)
@@ -54,13 +69,13 @@ const SearchInput = (props: Props) => {
       onChange={handleChange}
       // onSelect={}
       // notFoundContent={null}
-      // options={(data || []).map((d: any) => ({
-      //   value: d._id,
-      //   key: d._id,
-      //   label: d.name ? d.name : d.description,
-      // }))}
+      options={(data || []).map((d: any) => ({
+        value: d._id,
+        key: d._id,
+        label: d.name ? d.name : d.description,
+      }))}
     >
-      { (data || []).map((d: any) => (
+      {/* { (data || []).map((d: any) => (
         <Option 
           key={d._id}
           value={d._id}
@@ -68,7 +83,7 @@ const SearchInput = (props: Props) => {
           {d.name ? d.name : d.description}
         </Option>
       ))
-      }
+      } */}
     </Select>
   );
 }

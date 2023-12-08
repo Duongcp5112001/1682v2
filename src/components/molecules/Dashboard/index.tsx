@@ -88,8 +88,6 @@ const Dashboards = () => {
     } else return {}
   },[dataDashBoard])
 
-  console.log(memberContribution)
-
 
   const dataColumnChart = useMemo(() => {
     const months: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
