@@ -91,7 +91,7 @@ const Login = () => {
             >
               <Form.Item 
                 name='userName'
-                label='User Name'
+                label='Username'
                 rules={[
                   { required: true, message: 'Please input user name!' },
                 ]}
