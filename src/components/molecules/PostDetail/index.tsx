@@ -68,13 +68,12 @@ const PostDetail = (props: Props) => {
   }
 
   const handleLike_Dislike = async (itemId: string, action: string) => {
-    const postIndex = dataSource.findIndex((item: any) => item._id === itemId);
-    if (postIndex === -1) return;
-    const post = dataSource[postIndex];
-    let newLike = post.like?.length;
-    let newDislike = post.dislike?.length;
+    const post = dataSource;
+    let newLike = post.likeCount;
+    let newDislike = post.dislikeCount;
     let updatedLike = post.like ? [...post.like] : [];
     let updatedDislike = post.dislike ? [...post.dislike] : [];
+
     const userLiked = updatedLike.find(
       (item: any) => item.user === userData?._id
     );
@@ -130,16 +129,11 @@ const PostDetail = (props: Props) => {
       dislike: updatedDislike.length > 0 ? updatedDislike : undefined,
     };
 
-    const newDataSourse = [...dataSource];
-    newDataSourse[postIndex] = updatedPost;
-    setDataSource(newDataSourse);
+    setDataSource(updatedPost);
 
     const res = await updateActionPost(itemId, action)
-
     if (res.msg === SUCCESS) {
-      const updatedData = [...dataSource];
-      updatedData[postIndex] = res?.posts;
-      setDataSource(updatedData)
+      setDataSource(res?.posts)
     }
   };
 
@@ -191,7 +185,7 @@ const PostDetail = (props: Props) => {
                 <Statistic
                   value={dataSource?.like?.length}
                   prefix={
-                    dataSource.like?.find((e: any) => e.user === userData?._id) ?
+                    dataSource?.like?.find((e: any) => e.user === userData?._id) ?
                       <LikeTwoTone
                         onClick={() => handleLike_Dislike(dataSource._id, 'like')} />
                       :
@@ -202,9 +196,9 @@ const PostDetail = (props: Props) => {
                   valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
-                  value={dataSource.dislike?.length}
+                  value={dataSource?.dislike?.length}
                   prefix={
-                    dataSource.dislike?.find((e: any) => e.user === userData?._id) ?
+                    dataSource?.dislike?.find((e: any) => e.user === userData?._id) ?
                       <DislikeTwoTone
                         onClick={() => handleLike_Dislike(dataSource._id, 'dislike')}
                       />
@@ -228,7 +222,7 @@ const PostDetail = (props: Props) => {
               // extra={<div onClick={() => handleEditPost(dataSource)}>Edit</div>}
             >
               <Meta
-                avatar={<Avatar size={42} src={defaultUser} />}
+                avatar={<Avatar size={42} src={dataSource.updatedBy.avatar} />}
                 title={
                   <div>{encryptionUserName(dataSource?.updatedBy?.username)}</div>
                 }

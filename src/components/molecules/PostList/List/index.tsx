@@ -235,7 +235,7 @@ const PostList = (props: Props) => {
                 <Statistic
                   value={item?.like?.length}
                   prefix={
-                    item.like?.find((e: any) => e.user === userData?._id) ?
+                    item?.like?.find((e: any) => e.user === userData?._id) ?
                       <LikeTwoTone
                         onClick={() => handleLike_Dislike(item._id, 'like')} />
                       :
@@ -248,7 +248,7 @@ const PostList = (props: Props) => {
                 <Statistic
                   value={item.dislike?.length}
                   prefix={
-                    item.dislike?.find((e: any) => e.user === userData?._id) ?
+                    item?.dislike?.find((e: any) => e.user === userData?._id) ?
                       <DislikeTwoTone
                         onClick={() => handleLike_Dislike(item._id, 'dislike')}
                       />
