@@ -134,6 +134,11 @@ const ModalPost = (props: Props) => {
       form.resetFields()
     }
   }
+
+  const afterClose = () => {
+    setFileList([]);
+  }
+
   const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -170,6 +175,7 @@ const ModalPost = (props: Props) => {
       open={visible}
       footer={false}
       forceRender
+      afterClose={afterClose}
       closable={false}
       onCancel={handleClose}
       maskClosable
