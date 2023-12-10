@@ -165,6 +165,7 @@ const ModalPost = (props: Props) => {
         isAnonymous: false
       })
       setFileList(postData?.image)
+      setMetadataList(postData.image)
     }
   }, [postData])
   

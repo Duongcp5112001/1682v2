@@ -15,13 +15,19 @@ import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
-import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
+import { deletePost, deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
 import { usePostDetail } from '~/hooks/usePost';
 
 import defaultUser from '~/assets/images/defaultUser.png'
 import styles from './styles.module.scss'
 import { checkForbiddenWord, encryptionUserName } from '~/utils/helper';
 import ImageList from '../PostList/ImageList';
+import ModalPost from '../PostList/PostModal';
+import ModalConfirm from '~/components/atoms/ModalConfirm';
+import Svg from '~/components/atoms/Svg';
+import menuIcon from '~/assets/images/menuIcon.svg'
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '~/routes';
 
 const Spin = loadable(() => import("~/components/atoms/Spin"));
 const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
@@ -42,12 +48,14 @@ const PostDetail = (props: Props) => {
 
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [isLoadingComment, setIsLoadingComment] = useState(false)
+  const navigate = useNavigate();
 
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
   const [itemEditComment, setItemEditComment] = useState<any>({});
   const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
-  
+  const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
+  const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   useEffect(() => {
     if (dataPosts) {
       setDataSource(dataPosts)
@@ -172,6 +180,31 @@ const PostDetail = (props: Props) => {
     }
   }
 
+  const handleEditPost = () => {
+    setVisibleModalEditPost(true)
+  }
+
+  const handleDeletePost = async () => {
+    try {
+      const res = await deletePost(postId)
+      if (res) {
+        if (res.msg === 'Delete posts Success!') {
+          message.success(res.msg)
+          setVisibleModalDelete(false)
+          navigate(ROUTES.Posts)
+        } else {
+          message.error(res.msg)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const showDeleteModal = () => {
+    setVisibleModalDelete(true)
+  }
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <div className={styles.container}>
@@ -219,10 +252,41 @@ const PostDetail = (props: Props) => {
                   }
                 />
               ]}
-              // extra={<div onClick={() => handleEditPost(dataSource)}>Edit</div>}
+              extra={
+                <div>
+                  { dataSource?.updatedBy?._id === userData?._id ?
+                    <Dropdown
+                      menu={
+                        {
+                          items: [
+                            {
+                              label: <div onClick={() => handleEditPost()}>Edit</div>,
+                              key: '0',
+                            },
+                            {
+                              label: <div onClick={() => showDeleteModal()}>Delete</div>,
+                              key: '2',
+                              danger: true,
+                            },
+                          ]
+                        }
+                      }
+                      trigger={['click']}
+                    >
+                      <div
+                        className={styles.commentOption}
+                      >
+                        <Svg src={menuIcon} className='w-6' />
+                      </div>
+                    </Dropdown>
+                    : null
+                  }
+
+                </div>
+              }
             >
               <Meta
-                avatar={<Avatar size={42} src={dataSource.updatedBy.avatar} />}
+                avatar={<Avatar size={42} src={dataSource?.updatedBy?.avatar} />}
                 title={
                   <div>{encryptionUserName(dataSource?.updatedBy?.username)}</div>
                 }
@@ -324,6 +388,19 @@ const PostDetail = (props: Props) => {
         postId={itemEditComment?.postId}
         commentId={itemEditComment?.commentId}
         refetch={refetch}
+      />
+      <ModalPost
+        postData={dataPosts}
+        visible={visibleModalEditPost}
+        setVisible={setVisibleModalEditPost}
+        afterSuccess={refetch}
+      />
+      <ModalConfirm
+        onCancel={() => setVisibleModalDelete(false)}
+        onOk={handleDeletePost}
+        visible={visibleModalDelete}
+        title='Are you sure to delete this post!'
+        centered={true}
       />
     </Spin>
   )
