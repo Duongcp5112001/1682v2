@@ -73,7 +73,7 @@ const ModalPost = (props: Props) => {
       const fmData = {
         ...rest,
         image: metadataList,
-        isAnonymous: isAnonymous
+        isAnonymous: false
       }
       if (groupId) {
         if (postData) {
@@ -154,7 +154,7 @@ const ModalPost = (props: Props) => {
     if (postData) {
       form.setFieldsValue({
         description: postData.description,
-        isAnonymous: isAnonymous
+        isAnonymous: false
       })
       setFileList(postData?.image)
     }
@@ -187,14 +187,14 @@ const ModalPost = (props: Props) => {
       title={
         <div className={styles.titleGroup}>
           <strong>{userData?.username}</strong>
-          <Select
+          {/* <Select
             defaultValue={'Public'}
             size='small'
             onChange={handleChange}
           >
             <Option key={'1'} value={'Public'}>Public</Option>
             <Option key={'2'} value={'Anonymous'}>Anonymous</Option>
-          </Select>
+          </Select> */}
         </div>
         
       }

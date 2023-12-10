@@ -4,7 +4,7 @@ import List from '~/components/atoms/List'
 import { Avatar, Card, Dropdown, Form, Statistic, message } from 'antd'
 import { useAppSelector } from '~/store'
 import { DATE, SUCCESS } from '~/utils/constant'
-import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post'
+import { deletePost, deletePostComment, setCommentPost, updateActionPost } from '~/api/post'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { Authorization } from '~/wrapper/Authorization'
@@ -190,6 +190,22 @@ const PostList = (props: Props) => {
     setVisibleModalEditPost(true)
     setPostEditing(post)
   }
+
+  const handleDeletePost = async (post: any) => {
+    try {
+      const res = await deletePost(post._id)
+      if (res) {
+        if (res.msg === 'Delete posts Success!') {
+          message.success(res.msg)
+          refetch()
+        } else {
+          message.error(res.msg)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -245,7 +261,30 @@ const PostList = (props: Props) => {
               extra={
                 <div>
                   { item?.updatedBy?._id === userData?._id ?
-                    <Svg className='w-6' src={menuIcon} onClick={() => handleEditPost(item)}/>
+                    <Dropdown
+                      menu={
+                        {
+                          items: [
+                            {
+                              label: <div onClick={() => handleEditPost(item)}>Edit</div>,
+                              key: '0',
+                            },
+                            {
+                              label: <div onClick={() => handleDeletePost(item)}>Delete</div>,
+                              key: '2',
+                              danger: true,
+                            },
+                          ]
+                        }
+                      }
+                      trigger={['click']}
+                    >
+                      <div
+                        className={styles.commentOption}
+                      >
+                        <Svg src={menuIcon} className='w-6' />
+                      </div>
+                    </Dropdown>
                     : null
                   }
 
