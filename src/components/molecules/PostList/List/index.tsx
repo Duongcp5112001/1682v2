@@ -27,6 +27,7 @@ import menuIcon from '~/assets/images/menuIcon.svg'
 import loadable from '~/utils/loadable'
 import styles from './styles.module.scss'
 import ImageList from '../ImageList'
+import ModalConfirm from '~/components/atoms/ModalConfirm'
 
 const Svg = loadable(() => import("~/components/atoms/Svg"));
 const ModalEditComment = loadable(() => import("~/components/atoms/ModalEditComment"));
@@ -48,13 +49,16 @@ const PostList = (props: Props) => {
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
+
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
   const [itemEditComment, setItemEditComment] = useState<any>({});
   const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
 
   const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
+  const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [postEditing, setPostEditing] = useState({});
+  const [postDelete, setPostDelete] = useState('');
 
   useEffect(() => {
     if (dataPosts) {
@@ -191,12 +195,13 @@ const PostList = (props: Props) => {
     setPostEditing(post)
   }
 
-  const handleDeletePost = async (post: any) => {
+  const handleDeletePost = async () => {
     try {
-      const res = await deletePost(post._id)
+      const res = await deletePost(postDelete)
       if (res) {
         if (res.msg === 'Delete posts Success!') {
           message.success(res.msg)
+          setVisibleModalDelete(false)
           refetch()
         } else {
           message.error(res.msg)
@@ -206,6 +211,12 @@ const PostList = (props: Props) => {
       console.log(error)
     }
   }
+
+  const showDeleteModal = (postId: any) => {
+    setVisibleModalDelete(true)
+    setPostDelete(postId)
+  }
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -270,7 +281,7 @@ const PostList = (props: Props) => {
                               key: '0',
                             },
                             {
-                              label: <div onClick={() => handleDeletePost(item)}>Delete</div>,
+                              label: <div onClick={() => showDeleteModal(item._id)}>Delete</div>,
                               key: '2',
                               danger: true,
                             },
@@ -432,6 +443,13 @@ const PostList = (props: Props) => {
         visible={visibleModalEditPost}
         setVisible={setVisibleModalEditPost}
         afterSuccess={refetch}
+      />
+      <ModalConfirm
+        onCancel={() => setVisibleModalDelete(false)}
+        onOk={handleDeletePost}
+        visible={visibleModalDelete}
+        title='Are you sure to delete this post!'
+        centered={true}
       />
     </Spin>
   )

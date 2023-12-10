@@ -40,7 +40,6 @@ const ModalPost = (props: Props) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<any>();
-
   const uploadFileToFirebase = async (file: any, onSuccess: any, onError: any, onProgress: any) => {
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -60,7 +59,11 @@ const ModalPost = (props: Props) => {
           name: metadata.name,
           url: await getDownloadURL(snapshot.ref)
         };
-        setMetadataList((prevState: any) => [...prevState, result]);
+        setMetadataList((prevState: any) =>{
+          if (postData && postData.image?.length > 0) {
+            return [...postData.image, result]
+          }
+          return [...prevState, result]});
         onSuccess(result);
       }
     );
