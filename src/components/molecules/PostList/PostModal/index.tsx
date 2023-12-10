@@ -34,7 +34,7 @@ const ModalPost = (props: Props) => {
   const rules = [{ required: true, message: '' }];
   const [form] = Form.useForm();
   
-  const [metadataList, setMetadataList] = useState<any>('');
+  const [metadataList, setMetadataList] = useState<any>([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
