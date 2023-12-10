@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Dropdown, Layout, MenuProps, Spin, message, Input, SelectProps } from "antd";
+import { Badge, Dropdown, Layout, MenuProps, Spin, message, Input, SelectProps, Divider } from "antd";
 import { removeCookie } from "~/utils/cookie";
 import { ROUTES } from "~/routes";
 
@@ -13,10 +13,10 @@ import logo from "~/assets/images/logo_transparent.png";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
 import { setUserInfo } from "~/store/userInfo";
 import { Authorization } from "~/wrapper/Authorization";
-import { UserRole } from "~/utils/constant";
+import { SUCCESS, UserRole } from "~/utils/constant";
 import { useNavigate } from "react-router-dom";
 import { setAllNotifications } from "~/store/notification";
-import { getSelfNotification, markAsRead } from "~/api/notification";
+import { getSelfNotification, markAllAsRead, markAsRead } from "~/api/notification";
 import { LoadingOutlined } from '@ant-design/icons';
 import styles from "./styles.module.scss";
 import Select from "~/components/atoms/Select";
@@ -93,6 +93,34 @@ export default function Header() {
     },
   ];
 
+  const notificationItem = allNotifications?.map((item) => (
+    {
+      key: item._id,
+      label: (
+        <div
+          onClick={() => handleClickNotification(item)}
+          className="max-w-[250px]"
+          style={{ color: item?.read ? "rgb(113 113 122)" : "rgb(99 102 241)" }}
+        >
+          {item.content}
+        </div>
+      ),
+    }
+  ))
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      const res = await markAllAsRead()
+      if (res) {
+        if (res.msg === SUCCESS) {
+          dispatch(setAllNotifications(res.data));
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Layout className={styles.header}>
       <LayoutHeader className={styles.coverHeader}>
@@ -130,17 +158,20 @@ export default function Header() {
               }}
               menu={
                 {
-                  items: allNotifications?.map((item) => ({
-                    key: item._id,
-                    label: (
-                      <div
-                        onClick={() => handleClickNotification(item)}
-                        style={{ color: item?.read ? "red" : "blue" }}
-                      >
-                        {item.content}
-                      </div>
-                    ),
-                  })),
+                  items: [
+                    {
+                      key: '1',
+                      label: (
+                        <div
+                          onClick={() => handleMarkAllAsRead()}
+                          className="flex items-center justify-center bg-violet-200 py-1 font-medium"
+                        >
+                          Mark All As Read
+                        </div>
+                      ),
+                    },
+                    ...notificationItem
+                  ]
                 }
               }
             >
